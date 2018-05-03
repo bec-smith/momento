@@ -9,18 +9,37 @@ import {  ImagePicker,Permissions } from 'expo';
 class HomeScreen extends React.Component {
   constructor() {
     super()
-
-    this.state =
-      {
-        data:
-          [
-              {time: '09:00', title: 'Archery Training', description: 'The Beginner Archery and Beginner Crossbow course does not require you to bring any equipment, since everything you need will be provided for the course. ', circleColor: '#009688',lineColor:'#009688'},
-              {time: '10:45', title: 'Play Badminton', description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.'},
-              {time: '12:00', title: 'Lunch'},
-              {time: '14:00', title: 'Watch Soccer', description: 'Team sport played between two teams of eleven players with a spherical ball. ',lineColor:'#009688'},
-              {time: '16:30', title: 'Go to Fitness center', description: 'Look out for the Best Gym & Fitness Centers around me :)', circleColor: '#009688'}
-          ]
-     }
+    this.state = {
+      data: [
+        {
+          time: '09:00',
+          title: 'Archery Training',
+          description: 'The Beginner Archery and Beginner Crossbow course does not require you to bring any equipment, since everything you need will be provided for the course. ',
+          circleColor: '#009688',
+          lineColor:'#009688'
+        },
+        {
+          time: '10:45',
+          title: 'Play Badminton',
+          description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.'},
+        {
+          time: '12:00',
+          title: 'Lunch'
+        },
+        {
+          time: '14:00',
+          title: 'Watch Soccer',
+          description: 'Team sport played between two teams of eleven players with a spherical ball. ',
+          lineColor:'#009688'
+        },
+        {
+          time: '16:30',
+          title: 'Go to Fitness center',
+          description: 'Look out for the Best Gym & Fitness Centers around me :)',
+          circleColor: '#009688'
+        }
+      ]
+    }
   }
 
 
@@ -50,6 +69,14 @@ class HomeScreen extends React.Component {
           timeContainerStyle={{minWidth:52, marginTop: -5}}
           timeStyle={{textAlign: 'center', backgroundColor:'#ff9797', color:'white', padding:5, borderRadius:13}}
           descriptionStyle={{color:'gray'}}
+          onEventPress={(event) => {
+            this.props.navigation.navigate('Moment', {
+              title: event.title,
+              date: event.time,
+              description: event.description,
+              imgUrl: "/img/sample.jpg"
+            });
+          }}
           options={{
             style:{paddingTop:5}
           }}
@@ -181,6 +208,36 @@ pickFromGallery = async () => {
 
 }
 
+class MomentScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
+
+  render() {
+    const { params } = this.props.navigation.state;
+    const title = params ? params.title : null;
+    const date = params ? params.date : null;
+    const description = params ? params.description : null;
+    return (
+      <View style = {styles.container}>
+        <Button
+          title="Go back"
+          onPress={() => {
+            this.props.navigation.navigate('Home');
+          }}
+        />
+        <Text style = {styles.momentTitleText}>{title}</Text>
+        <Text>{date}</Text>
+        <Text style = {styles.momentDescriptionText}>{description}</Text>
+        <View style = {styles.imageGrid}>
+          <Image style = {styles.momentImage} source = {require('./img/sample.jpg')}/>
+        </View>
+      </View>
+    );
+  }
+}
+
+
 const RootStack = StackNavigator(
   {
     Home: {
@@ -189,6 +246,9 @@ const RootStack = StackNavigator(
     Details: {
       screen: DetailsScreen,
     },
+    Moment: {
+      screen: MomentScreen,
+    }
   },
   {
     initialRouteName: 'Home',
@@ -209,7 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 20,
-    paddingTop:65,
+    paddingTop: 65,
   },
   titleText:{
     fontFamily: 'Baskerville',
@@ -223,12 +283,27 @@ const styles = StyleSheet.create({
   },
   buttons: {
     alignItems: 'flex-end',
-    flexDirection: 'row',
     justifyContent: 'center',
   },
   button: {
     paddingHorizontal: 20,
     paddingVertical: 10,
+  },
+  momentTitleText: {
+    fontSize: 40,
+  },
+  momentDescriptionText: {
+    paddingTop: 20,
+  },
+  imageGrid: {
+    flexDirection: 'row',
+    paddingTop: 50,
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+  },
+  momentImage: {
+    width: 400,
+    height: 400,
   },
   title:{
      fontSize:16,
@@ -254,7 +329,7 @@ const createMomentStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ecf0f1',
     padding: 20,
-    paddingTop:65,
+    paddingTop: 65,
   },
   input: {
     margin: 20,
