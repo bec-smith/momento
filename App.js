@@ -24,7 +24,7 @@ class HomeScreen extends React.Component {
   }
 
 
-  insertNewTime (time) =>{
+  insertNewTime= (time) => {
     this.setState({ data: [...this.state.data, time] })
   }
 
