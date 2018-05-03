@@ -163,12 +163,11 @@ class AddMomentScreen extends React.Component {
             title="Done"
             onPress={() => {
               if (this.state.time != null){
-              global.data.unshift(this.state);
-            }
+                global.data.unshift(this.state);
+              }
               this.props.navigation.navigate('Home'
             //  , { eventParam: this.state, }
-            );
-
+              );
             }}
           />
         </View>
@@ -302,7 +301,7 @@ const styles = StyleSheet.create({
     width: 400,
     height: 400,
   },
-  title:{
+  title: {
      fontSize:16,
      fontWeight: 'bold'
    },
@@ -310,7 +309,7 @@ const styles = StyleSheet.create({
      flexDirection: 'row',
      paddingRight: 50
    },
-   image:{
+   image: {
      width: 50,
      height: 50,
      borderRadius: 25
