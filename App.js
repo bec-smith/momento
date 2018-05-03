@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Alert, TouchableHighlight, ScrollView, Button } from 'react-native';
+import { StyleSheet, Text, View, Alert, TouchableHighlight, ScrollView, Button, Image } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 import Timeline from 'react-native-timeline-listview'
@@ -76,6 +76,7 @@ insertNewTime= (time) =>{
               title: event.title,
               date: event.time,
               description: event.description,
+              imgUrl: "/img/sample.jpg"
             });
           }}
           options={{
@@ -153,6 +154,9 @@ class MomentScreen extends React.Component {
         <Text style = {styles.momentTitleText}>{title}</Text>
         <Text>{date}</Text>
         <Text style = {styles.momentDescriptionText}>{description}</Text>
+        <View style = {styles.imageGrid}>
+          <Image style = {styles.momentImage} source = {require('./img/sample.jpg')}/>
+        </View>
       </View>
     );
   }
@@ -213,4 +217,14 @@ const styles = StyleSheet.create({
   momentDescriptionText: {
     paddingTop: 20,
   },
+  imageGrid: {
+    flexDirection: 'row',
+    paddingTop: 50,
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+  },
+  momentImage: {
+    width: 400,
+    height: 400,
+  }
 });
