@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Alert, TouchableHighlight, ScrollView, Button, Image } from 'react-native';
-import { StyleSheet, Text, TextInput, Image, View, Alert, TouchableHighlight, ScrollView, Button, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, Image, View, Alert, TouchableHighlight, ScrollView, Button } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 import Timeline from 'react-native-timeline-listview'
@@ -221,6 +220,12 @@ class MomentScreen extends React.Component {
     const description = params ? params.description : null;
     return (
       <View style = {styles.container}>
+        <Button
+          title="Go back"
+          onPress={() => {
+            this.props.navigation.navigate('Home');
+          }}
+        />
         <Text style = {styles.momentTitleText}>{title}</Text>
         <Text>{date}</Text>
         <Text style = {styles.momentDescriptionText}>{description}</Text>
@@ -324,7 +329,7 @@ const createMomentStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ecf0f1',
     padding: 20,
-    paddingTop:65,
+    paddingTop: 65,
   },
   input: {
     margin: 20,
