@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Alert, TouchableHighlight, ScrollView, Button, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, Image, View, Alert, TouchableHighlight, ScrollView, Button, Image } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 import Timeline from 'react-native-timeline-listview'
+import {  ImagePicker,Permissions } from 'expo';
+
 
 class HomeScreen extends React.Component {
-  constructor(){
+  constructor() {
     super()
     this.state = {
       data: [
@@ -39,29 +42,25 @@ class HomeScreen extends React.Component {
       ]
     }
   }
-  static navigationOptions = {
-  header: null,
 
-};
 
-insertNewTime= (time) =>{
-       this.setState({
-           selectedTags: this.state.data.push(time)
-       })
-   }
+  insertNewTime= (time) => {
+    this.setState({ data: [...this.state.data, time] })
+  }
 
   render() {
+    const { params } = this.props.navigation.state;
+    const eventParam = params ? params.eventParam : null; //if (params) params.otherParam,  else null
+    const content = eventParam !== null ? (eventParam) =>  this.insertNewTime(eventParam) : null //supposed to auto add new event
     return (
 
       <View style={styles.container}>
-
-
+      <Text>otherParam: {JSON.stringify(eventParam)}</Text> //shows user inputted moment as json
       <View style={{
-      alignItems: 'center',
+        alignItems: 'center',
       }}>
       <Text style={styles.titleText}>Momento</Text>
       </View>
-
         <Timeline
           style={styles.list}
           data={this.state.data}
@@ -85,19 +84,28 @@ insertNewTime= (time) =>{
         />
 
         <View style={styles.buttons}>
+          <TouchableHighlight
+            onPress={() => {this.insertNewTime(eventParam)  }}
+            style={styles.button}
+          >
+            <FontAwesome
+              size={20}
+              name='calendar'
+              color='#f50'
+            />
+          </TouchableHighlight>
 
-        <TouchableHighlight
-        onPress={() => this.props.navigation.navigate('Details')}
-        style = {styles.button}
-        >
+          <TouchableHighlight
+            onPress={() => {this.props.navigation.navigate('Details');}}
+            style = {styles.button}
+          >
+           <FontAwesome
+             size={20}
+             name='plus-circle'
+             color='#f50'
+           />
 
-        <FontAwesome
-          size={40}
-          name='plus-circle'
-          color='#f50'/>
-
-        </TouchableHighlight>
-
+         </TouchableHighlight>
         </View>
 
       </View>
@@ -106,37 +114,99 @@ insertNewTime= (time) =>{
 
 }
 
-// click this button - add random thing to timeline , just checking if it was possible to do this
-// <TouchableHighlight
-// //onPress={() => Alert.alert('You clicked add!') }
-// onPress = {() => {this.insertNewTime("{time: '15:00', title: 'Lunch'}")  }}
-// //underlayColor =  "purple" //color it turns when pressed
-// style = {styles.button}
-// >
-//
-// <FontAwesome
-//   size={40}
-//   name='calendar'
-//   color='#f50'/>
-//
-// </TouchableHighlight>
 
+//DetailsScreen AKA make a moment screen
 class DetailsScreen extends React.Component {
-  static navigationOptions = {
-  header: null,
-};
+  state = {
+     title: '',
+     time: '',
+     description: '',
+     imageUrl: null,
+
+   };
+
   render() {
+    let { imageUrl } = this.state;
+
+    let momentObject = {time:"10:45", title:'newEvent', description:'the description'};
+
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Add A Moment Screen</Text>
+
+      <View style={createMomentStyles.container}>
+
+        <TextInput
+         style={createMomentStyles.input}
+         value={this.state.title}
+         onChangeText={title => this.setState({title})}
+         placeholder="Title"
+         autoFocus={true}
+         multiline = {true}
+         numberOfLines = {4}
+         returnKeyType="next"
+         blurOnSubmit={false}
+        />
+         <TextInput
+         style={createMomentStyles.input}
+         value={this.state.time}
+         onChangeText={time => this.setState({time})}
+         placeholder="Date"
+         autoFocus={true}
+         returnKeyType="next"
+         blurOnSubmit={false}
+        />
+         <TextInput
+         style={createMomentStyles.input}
+         value={this.state.description}
+         onChangeText={description => this.setState({description})}
+         placeholder="Description"
+         autoFocus={true}
+         multiline = {true}
+         numberOfLines = {4}
+         returnKeyType="done"
+         blurOnSubmit={false}
+        />
+
+        <Button
+         title="Pick an image from camera roll"
+         onPress={this.pickFromGallery}
+        />
+        {imageUrl &&
+         <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200 }} />}
 
         <Button
           title="Go back"
-          onPress={() => this.props.navigation.goBack()}
+          onPress={() => {
+            this.props.navigation.navigate('Home', {
+              eventParam: this.state, //everything you fill in on the create moment page gets transferred over
+            });
+          }}
         />
       </View>
+
     );
   }
+  _pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    allowsEditing: true,
+    aspect: [4, 3],
+  });
+
+  if (!result.cancelled) {
+    this.setState({ imageUrl: result.uri });
+  }
+};
+
+pickFromGallery = async () => {
+  const permissions = Permissions.CAMERA_ROLL;
+  const { status } = await Permissions.askAsync(permissions);
+
+  console.log(permissions, status);
+  if(status === 'granted') {
+    this._pickImage()
+  }
+}
+
+
 }
 
 class MomentScreen extends React.Component {
@@ -177,6 +247,9 @@ const RootStack = StackNavigator(
   },
   {
     initialRouteName: 'Home',
+    headerMode: 'none',
+    mode: 'modal', //makes screen slide up
+
   }
 );
 
@@ -226,5 +299,41 @@ const styles = StyleSheet.create({
   momentImage: {
     width: 400,
     height: 400,
-  }
+  },
+  title:{
+     fontSize:16,
+     fontWeight: 'bold'
+   },
+   descriptionContainer:{
+     flexDirection: 'row',
+     paddingRight: 50
+   },
+   image:{
+     width: 50,
+     height: 50,
+     borderRadius: 25
+   },
+   textDescription: {
+     marginLeft: 10,
+     color: 'gray'
+   },
+});
+
+const createMomentStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ecf0f1',
+    padding: 20,
+    paddingTop:65,
+  },
+  input: {
+    margin: 20,
+    marginBottom: 0,
+    height: 34,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    fontSize: 16,
+  },
 });
