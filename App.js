@@ -7,7 +7,7 @@ import {  ImagePicker,Permissions } from 'expo';
 
 
 class HomeScreen extends React.Component {
-  constructor(){
+  constructor() {
     super()
 
     this.state =
@@ -19,37 +19,28 @@ class HomeScreen extends React.Component {
               {time: '12:00', title: 'Lunch'},
               {time: '14:00', title: 'Watch Soccer', description: 'Team sport played between two teams of eleven players with a spherical ball. ',lineColor:'#009688'},
               {time: '16:30', title: 'Go to Fitness center', description: 'Look out for the Best Gym & Fitness Centers around me :)', circleColor: '#009688'}
-         ]
+          ]
      }
   }
 
 
-insertNewTime= (time) =>{
-  this.setState({ data: [...this.state.data, time] })
-   }
+  insertNewTime (time) =>{
+    this.setState({ data: [...this.state.data, time] })
+  }
 
   render() {
-
-
-
     const { params } = this.props.navigation.state;
     const eventParam = params ? params.eventParam : null; //if (params) params.otherParam,  else null
     const content = eventParam !== null ? (eventParam) =>  this.insertNewTime(eventParam) : null //supposed to auto add new event
-    console.log(content)
     return (
 
       <View style={styles.container}>
-
-
       <Text>otherParam: {JSON.stringify(eventParam)}</Text> //shows user inputted moment as json
-
-
       <View style={{
-      alignItems: 'center',
+        alignItems: 'center',
       }}>
       <Text style={styles.titleText}>Momento</Text>
       </View>
-
         <Timeline
           style={styles.list}
           data={this.state.data}
@@ -65,31 +56,28 @@ insertNewTime= (time) =>{
         />
 
         <View style={styles.buttons}>
+          <TouchableHighlight
+            onPress={() => {this.insertNewTime(eventParam)  }}
+            style={styles.button}
+          >
+            <FontAwesome
+              size={20}
+              name='calendar'
+              color='#f50'
+            />
+          </TouchableHighlight>
 
+          <TouchableHighlight
+            onPress={() => {this.props.navigation.navigate('Details');}}
+            style = {styles.button}
+          >
+           <FontAwesome
+             size={20}
+             name='plus-circle'
+             color='#f50'
+           />
 
-        <TouchableHighlight
-        onPress={() => {this.insertNewTime(eventParam)  }}
-        style={styles.button}
-        >
-
-        <FontAwesome
-          size={20}
-          name='calendar'
-          color='#f50'/>
-        </TouchableHighlight>
-
-        <TouchableHighlight
-        onPress={() => {this.props.navigation.navigate('Details');}}
-        style = {styles.button}
-        >
-
-     <FontAwesome
-       size={20}
-       name='plus-circle'
-       color='#f50'/>
-
-     </TouchableHighlight>
-
+         </TouchableHighlight>
         </View>
 
       </View>
@@ -118,44 +106,44 @@ class DetailsScreen extends React.Component {
 
       <View style={createMomentStyles.container}>
 
-             <TextInput
-               style={createMomentStyles.input}
-               value={this.state.title}
-               onChangeText={title => this.setState({title})}
-               placeholder="Title"
-               autoFocus={true}
-               multiline = {true}
-               numberOfLines = {4}
-               returnKeyType="next"
-               blurOnSubmit={false}
-             />
-               <TextInput
-               style={createMomentStyles.input}
-               value={this.state.time}
-               onChangeText={time => this.setState({time})}
-               placeholder="Date"
-               autoFocus={true}
-               returnKeyType="next"
-               blurOnSubmit={false}
-             />
-               <TextInput
-               style={createMomentStyles.input}
-               value={this.state.description}
-               onChangeText={description => this.setState({description})}
-               placeholder="Description"
-               autoFocus={true}
-               multiline = {true}
-               numberOfLines = {4}
-               returnKeyType="done"
-               blurOnSubmit={false}
-             />
+        <TextInput
+         style={createMomentStyles.input}
+         value={this.state.title}
+         onChangeText={title => this.setState({title})}
+         placeholder="Title"
+         autoFocus={true}
+         multiline = {true}
+         numberOfLines = {4}
+         returnKeyType="next"
+         blurOnSubmit={false}
+        />
+         <TextInput
+         style={createMomentStyles.input}
+         value={this.state.time}
+         onChangeText={time => this.setState({time})}
+         placeholder="Date"
+         autoFocus={true}
+         returnKeyType="next"
+         blurOnSubmit={false}
+        />
+         <TextInput
+         style={createMomentStyles.input}
+         value={this.state.description}
+         onChangeText={description => this.setState({description})}
+         placeholder="Description"
+         autoFocus={true}
+         multiline = {true}
+         numberOfLines = {4}
+         returnKeyType="done"
+         blurOnSubmit={false}
+        />
 
-             <Button
-               title="Pick an image from camera roll"
-               onPress={this.pickFromGallery}
-             />
-             {imageUrl &&
-               <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200 }} />}
+        <Button
+         title="Pick an image from camera roll"
+         onPress={this.pickFromGallery}
+        />
+        {imageUrl &&
+         <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200 }} />}
 
         <Button
           title="Go back"
@@ -174,8 +162,6 @@ class DetailsScreen extends React.Component {
     allowsEditing: true,
     aspect: [4, 3],
   });
-
-  console.log(result);
 
   if (!result.cancelled) {
     this.setState({ imageUrl: result.uri });
@@ -231,36 +217,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-list: {
-  flex: 1,
-  marginTop:20,
-},
-buttons: {
-  alignItems: 'flex-end',
-  flexDirection: 'row',
-  justifyContent: 'center',
-},
-button: {
-  paddingHorizontal: 20,
-  paddingVertical: 10,
-},
-title:{
-   fontSize:16,
-   fontWeight: 'bold'
- },
- descriptionContainer:{
-   flexDirection: 'row',
-   paddingRight: 50
- },
- image:{
-   width: 50,
-   height: 50,
-   borderRadius: 25
- },
- textDescription: {
-   marginLeft: 10,
-   color: 'gray'
- },
+  list: {
+    flex: 1,
+    marginTop:20,
+  },
+  buttons: {
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  title:{
+     fontSize:16,
+     fontWeight: 'bold'
+   },
+   descriptionContainer:{
+     flexDirection: 'row',
+     paddingRight: 50
+   },
+   image:{
+     width: 50,
+     height: 50,
+     borderRadius: 25
+   },
+   textDescription: {
+     marginLeft: 10,
+     color: 'gray'
+   },
 });
 
 const createMomentStyles = StyleSheet.create({
