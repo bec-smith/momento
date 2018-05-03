@@ -46,8 +46,8 @@ class HomeScreen extends React.Component {
   // }
 
   render() {
-    const { params } = this.props.navigation.state;
-    const eventParam = params ? params.eventParam : null; //if (params) params.otherParam,  else null
+    //const { params } = this.props.navigation.state;
+  //  const eventParam = params ? params.eventParam : null; //if (params) params.otherParam,  else null
     // const content = eventParam !== null ? (eventParam) =>  this.insertNewTime(eventParam) : null //supposed to auto add new event
     return (
 
@@ -104,9 +104,9 @@ class HomeScreen extends React.Component {
 //DetailsScreen AKA make a moment screen
 class AddMomentScreen extends React.Component {
   state = {
-     title: '',
-     time: '',
-     description: '',
+     title: null,
+     time: null,
+     description: null,
      imageUrl: null,
    };
 
@@ -162,10 +162,13 @@ class AddMomentScreen extends React.Component {
           <Button
             title="Done"
             onPress={() => {
+              if (this.state.time != null){
               global.data.unshift(this.state);
-              this.props.navigation.navigate('Home', {
-                eventParam: this.state, //everything you fill in on the create moment page gets transferred over
-              });
+            }
+              this.props.navigation.navigate('Home'
+            //  , { eventParam: this.state, }
+            );
+
             }}
           />
         </View>
