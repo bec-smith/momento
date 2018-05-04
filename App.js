@@ -122,7 +122,7 @@ class AddMomentScreen extends React.Component {
           Add a moment!
         </Text>
         <TextInput
-           style={createMomentStyles.input}
+           style={createMomentStyles.smallInput}
            value={this.state.title}
            onChangeText={title => this.setState({title})}
            placeholder="Title"
@@ -132,7 +132,7 @@ class AddMomentScreen extends React.Component {
            blurOnSubmit={false}
         />
          <TextInput
-           style={createMomentStyles.input}
+           style={createMomentStyles.smallInput}
            value={this.state.time}
            onChangeText={time => this.setState({time})}
            placeholder="Date"
@@ -142,7 +142,7 @@ class AddMomentScreen extends React.Component {
            blurOnSubmit={false}
         />
          <TextInput
-           style={createMomentStyles.input}
+           style={createMomentStyles.largeInput}
            value={this.state.description}
            onChangeText={description => this.setState({description})}
            placeholder="Description"
@@ -327,10 +327,20 @@ const createMomentStyles = StyleSheet.create({
     padding: 20,
     paddingTop: 65,
   },
-  input: {
+  smallInput: {
     margin: 20,
     marginBottom: 0,
     height: 34,
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    fontSize: 16,
+  },
+  largeInput: {
+    margin: 20,
+    marginBottom: 0,
+    height: 80,
     paddingHorizontal: 10,
     borderRadius: 4,
     borderColor: '#ccc',
