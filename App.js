@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, Image, View, Alert, TouchableHighlight, ScrollView, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, Image, View, TouchableHighlight, ScrollView, Button } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 import Timeline from 'react-native-timeline-listview'
-import {  ImagePicker,Permissions } from 'expo';
+
+import AddMoment from './AddMoment.js';
+import ViewMoment from './ViewMoment.js';
 
 global.data = [
   {
@@ -47,12 +49,11 @@ class HomeScreen extends React.Component {
 
   render() {
     //const { params } = this.props.navigation.state;
-  //  const eventParam = params ? params.eventParam : null; //if (params) params.otherParam,  else null
+    //const eventParam = params ? params.eventParam : null; //if (params) params.otherParam,  else null
     // const content = eventParam !== null ? (eventParam) =>  this.insertNewTime(eventParam) : null //supposed to auto add new event
     return (
 
       <View style={styles.container}>
-      {/* <Text>otherParam: {JSON.stringify(eventParam)}</Text> //shows user inputted moment as json */}
       <View style={{
         alignItems: 'center',
       }}>
@@ -68,7 +69,7 @@ class HomeScreen extends React.Component {
           timeStyle={{textAlign: 'center', backgroundColor:'#349DD8', color:'white', padding:5, borderRadius:13}}
           descriptionStyle={{color:'gray'}}
           onEventPress={(event) => {
-            this.props.navigation.navigate('Moment', {
+            this.props.navigation.navigate('ViewMoment', {
               title: event.title,
               date: event.time,
               description: event.description,
@@ -100,146 +101,16 @@ class HomeScreen extends React.Component {
 
 }
 
-
-//DetailsScreen AKA make a moment screen
-class AddMomentScreen extends React.Component {
-  state = {
-     title: null,
-     time: null,
-     description: null,
-     imageUrl: null,
-   };
-
-  render() {
-    let { imageUrl } = this.state;
-
-    let momentObject = {time:"10:45", title:'newEvent', description:'the description'};
-
-    return (
-
-      <View style={createMomentStyles.container}>
-        <Text style={createMomentStyles.titleText}>
-          Add a moment!
-        </Text>
-        <TextInput
-           style={createMomentStyles.smallInput}
-           value={this.state.title}
-           onChangeText={title => this.setState({title})}
-           placeholder="Title"
-           multiline = {true}
-           numberOfLines = {4}
-           returnKeyType="next"
-           blurOnSubmit={false}
-        />
-         <TextInput
-           style={createMomentStyles.smallInput}
-           value={this.state.time}
-           onChangeText={time => this.setState({time})}
-           placeholder="Date"
-           multiline = {true}
-           numberOfLines = {4}
-           returnKeyType="next"
-           blurOnSubmit={false}
-        />
-         <TextInput
-           style={createMomentStyles.largeInput}
-           value={this.state.description}
-           onChangeText={description => this.setState({description})}
-           placeholder="Description"
-           multiline = {true}
-           numberOfLines = {4}
-           returnKeyType="done"
-           blurOnSubmit={true}
-        />
-        <View style={{ paddingTop: 20 }}>
-          <Button
-            title="Pick an image from camera roll"
-            onPress={this.pickFromGallery}
-          />
-        </View>
-        {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
-        <View style={{ paddingTop: 20 }}>
-          <Button
-            title="Done"
-            onPress={() => {
-              if (this.state.time != null){
-                global.data.unshift(this.state);
-              }
-              this.props.navigation.navigate('Home'
-            //  , { eventParam: this.state, }
-              );
-            }}
-          />
-        </View>
-      </View>
-
-    );
-  }
-  _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if (!result.cancelled) {
-      this.setState({ imageUrl: result.uri });
-    }
-  };
-
-  pickFromGallery = async () => {
-    const permissions = Permissions.CAMERA_ROLL;
-    const { status } = await Permissions.askAsync(permissions);
-
-    console.log(permissions, status);
-    if(status === 'granted') {
-      this._pickImage()
-    }
-  }
-
-}
-
-class MomentScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
-
-  render() {
-    const { params } = this.props.navigation.state;
-    const title = params ? params.title : null;
-    const date = params ? params.date : null;
-    const description = params ? params.description : null;
-    const imgUrl = params ? params.imgUrl : null;
-    return (
-      <View style = {styles.momentContainer}>
-        <FontAwesome
-          style = {{ alignSelf: 'center' }}
-          size={30}
-          name='angle-down'
-          color='#000000'
-        />
-        <Text style = {styles.momentTitleText}>{title}</Text>
-        <Text>{date}</Text>
-        <Text style = {styles.momentDescriptionText}>{description}</Text>
-        <View style = {styles.imageGrid}>
-          {imgUrl && <Image source={{ uri: imgUrl }} style={styles.momentImage} />}
-          {/* <Image style = {styles.momentImage} source = {require('./img/sample.jpg')}/> */}
-        </View>
-      </View>
-    );
-  }
-}
-
-
 const RootStack = StackNavigator(
   {
     Home: {
       screen: HomeScreen,
     },
     AddMoment: {
-      screen: AddMomentScreen,
+      screen: AddMoment,
     },
-    Moment: {
-      screen: MomentScreen,
+    ViewMoment: {
+      screen: ViewMoment,
     }
   },
   {
@@ -281,31 +152,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  momentTitleText: {
-    fontSize: 40,
-  },
-  momentDescriptionText: {
-    paddingTop: 20,
-  },
-  momentContainer: {
-    padding: 20,
-    paddingTop: 20,
-  },
-  imageGrid: {
-    flexDirection: 'row',
-    paddingTop: 50,
-    alignSelf: 'flex-start',
-    justifyContent: 'center',
-  },
-  momentImage: {
-    width: 400,
-    height: 400,
-  },
   title: {
      fontSize:16,
      fontWeight: 'bold'
    },
-   descriptionContainer:{
+   descriptionContainer: {
      flexDirection: 'row',
      paddingRight: 50
    },
@@ -318,37 +169,4 @@ const styles = StyleSheet.create({
      marginLeft: 10,
      color: 'gray'
    },
-});
-
-const createMomentStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ecf0f1',
-    padding: 20,
-    paddingTop: 65,
-  },
-  smallInput: {
-    margin: 20,
-    marginBottom: 0,
-    height: 34,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    fontSize: 16,
-  },
-  largeInput: {
-    margin: 20,
-    marginBottom: 0,
-    height: 80,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    fontSize: 16,
-  },
-  titleText: {
-    fontSize: 40,
-    alignSelf: 'center',
-  },
 });
