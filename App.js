@@ -9,25 +9,25 @@ import ViewMoment from './ViewMoment.js';
 
 global.data = [
   {
-    time: 'Apr. 28, 2018',
+    time: 'Apr 28th, 2018',
     title: 'Beach Day!',
     description: 'Day trip to Santa Cruz :) 🏖🌊',
     imageUrl: 'https://www.atlantisbahamas.com/media/Things%20To%20Do/Water%20Park/Beaches/Hero/Experiences_Beach.jpg'
   },
   {
-    time: 'Apr 26, 2018',
+    time: 'Apr 26th, 2018',
     title: 'Anniversary Dinner🍴😍',
     description: 'Dinner at Alexander\'s Steakhouse for 3 year anniversary!',
     imageUrl: 'http://www.goldcoastrealty-chicago.com/images/19399927_s_450.jpg'
   },
   {
-    time: 'Feb 14, 2018',
+    time: 'Feb 14th, 2018',
     title: 'Valentine\'s Day 💕💘',
     description: 'We saw a movie and had dinner',
     imageUrl: 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/18/02/3200x2133/gallery-1515434402-valentinesdayfacts.jpg?resize=980:*'
   },
   {
-    time: 'Jan 1, 2018',
+    time: 'Jan 1st, 2018',
     title: 'New Years Party 🎉',
     description: 'We kissed under the stars ',
     imageUrl: 'http://huntsvilleadventures.com/wp-content/uploads/2017/09/Fireworks.jpg'

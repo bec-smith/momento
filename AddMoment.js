@@ -1,59 +1,145 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, Image, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, Image, View, Button, ScrollView } from 'react-native';
 import { ImagePicker,Permissions } from 'expo';
+import Calendar from 'react-native-calendar-datepicker';
+import Moment from 'moment';
+
 
 class AddMoment extends React.Component {
   state = {
      title: null,
-     time: null,
+     time: Moment().startOf('day'),
      description: null,
      imageUrl: null,
    };
 
   render() {
     let { imageUrl } = this.state;
+    const BLUE = '#2196F3';
+    const WHITE = '#FFFFFF';
+    const GREY = '#BDBDBD';
+    const BLACK = '#424242';
+    const LIGHT_GREY = '#F5F5F5';
 
-    let momentObject = {time:"10:45", title:'newEvent', description:'the description'};
 
     return (
-
+<ScrollView>
       <View style={styles.container}>
         <Text style={styles.titleText}>
           Add a moment!
         </Text>
         <TextInput
-           style={styles.smallInput}
-           value={this.state.title}
-           onChangeText={title => this.setState({title})}
-           placeholder="Title"
-           multiline = {true}
-           numberOfLines = {4}
-           returnKeyType="next"
-           blurOnSubmit={false}
+          style={styles.smallInput}
+          value={this.state.title}
+          onChangeText={title => this.setState({title})}
+          placeholder="Title"
+          multiline = {true}
+          numberOfLines = {4}
+          returnKeyType="next"
+          blurOnSubmit={true}
+
         />
-         <TextInput
-           style={styles.smallInput}
-           value={this.state.time}
-           onChangeText={time => this.setState({time})}
-           placeholder="Date"
-           multiline = {true}
-           numberOfLines = {4}
-           returnKeyType="next"
-           blurOnSubmit={false}
+
+        <Calendar
+          onChange={(time) =>
+          {
+            this.setState({time})
+
+            //formattedTime = time.format("MMMM Do YYYY")
+            //this.setState({time: formattedTime})
+            //Supposed to format date so it comes out like this : February 14th 2010
+            //not working i guess??????
+
+          }}
+          selected={this.state.time}
+          minDate={Moment().subtract(10, 'years').startOf('day')}
+          maxDate={Moment().startOf('day')}
+          showArrows = {true}
+
+
+          style={{
+             borderWidth: 1,
+             borderColor: GREY,
+             borderRadius: 5,
+           }}
+           barView={{
+             backgroundColor: BLUE,
+             padding: 10,
+           }}
+           barText={{
+             fontWeight: 'bold',
+             color: WHITE,
+           }}
+           stageView={{
+             padding: 0,
+           }}
+           // Day selector styling
+           dayHeaderView={{
+             backgroundColor: LIGHT_GREY,
+             borderBottomColor: GREY,
+           }}
+           dayHeaderText={{
+             fontWeight: 'bold',
+             color: BLACK,
+           }}
+           dayRowView={{
+             borderColor: LIGHT_GREY,
+             height: 40,
+           }}
+           dayText={{
+             color: BLACK,
+           }}
+           dayDisabledText={{
+             color: GREY,
+           }}
+           dayTodayText={{
+             fontWeight: 'bold',
+             color: BLUE,
+           }}
+           daySelectedText={{
+             fontWeight: 'bold',
+             backgroundColor: BLUE,
+             color: WHITE,
+             borderRadius: 15,
+             borderColor: "transparent",
+             overflow: 'hidden',
+           }}
+           // Styling month selector.
+           monthText={{
+             color: BLACK,
+             borderColor: BLACK,
+           }}
+           monthDisabledText={{
+             color: GREY,
+             borderColor: GREY,
+           }}
+           monthSelectedText={{
+             fontWeight: 'bold',
+             backgroundColor: BLUE,
+             color: WHITE,
+             overflow: 'hidden',
+           }}
+           // Styling year selector.
+           yearMinTintColor={BLUE}
+           yearMaxTintColor={GREY}
+           yearText={{
+             color: BLACK,
+           }}
         />
-         <TextInput
-           style={styles.largeInput}
-           value={this.state.description}
-           onChangeText={description => this.setState({description})}
-           placeholder="Description"
-           multiline = {true}
-           numberOfLines = {4}
-           returnKeyType="done"
-           blurOnSubmit={true}
+        <TextInput
+          style={styles.largeInput}
+          value={this.state.description}
+          onChangeText={description => this.setState({description})}
+          placeholder="Description"
+          multiline = {true}
+          numberOfLines = {4}
+          returnKeyType="done"
+          blurOnSubmit={true}
+
         />
         <View style={{ paddingTop: 20 }}>
           <Button
-            title="Pick an image from camera roll"
+            title="Pick image from camera roll"
             onPress={this.pickFromGallery}
           />
         </View>
@@ -62,16 +148,21 @@ class AddMoment extends React.Component {
           <Button
             title="Done"
             onPress={() => {
-              if (this.state.time != null){
-                global.data.unshift(this.state);
-              }
-              this.props.navigation.navigate('Home'
-            //  , { eventParam: this.state, }
-              );
+
+            //  this.setState( {time: this.state.time.format("MMMM Do YYYY")})
+              // if (this.state.time != null){
+              //   global.data.unshift(this.state);
+              // }
+              // this.props.navigation.navigate('Home');
+
+
+              console.log(this.state)
+
             }}
           />
         </View>
       </View>
+      </ScrollView>
 
     );
   }
@@ -82,6 +173,7 @@ class AddMoment extends React.Component {
     });
 
     if (!result.cancelled) {
+      // console.log(result) returns only height, width, type, cancelled(t/f), and uri available
       this.setState({ imageUrl: result.uri });
     }
   };
@@ -95,7 +187,9 @@ class AddMoment extends React.Component {
       this._pickImage()
     }
   }
+
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -106,7 +200,6 @@ const styles = StyleSheet.create({
   },
   smallInput: {
     margin: 20,
-    marginBottom: 0,
     height: 34,
     paddingHorizontal: 10,
     borderRadius: 4,
@@ -116,7 +209,6 @@ const styles = StyleSheet.create({
   },
   largeInput: {
     margin: 20,
-    marginBottom: 0,
     height: 80,
     paddingHorizontal: 10,
     borderRadius: 4,
