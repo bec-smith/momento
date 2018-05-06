@@ -26,7 +26,6 @@ class ViewMoment extends React.Component {
         <Text style = {styles.momentDescriptionText}>{description}</Text>
         <View style = {styles.imageGrid}>
           {imgUrl && <Image source={{ uri: imgUrl }} style={styles.momentImage} />}
-          {/* <Image style = {styles.momentImage} source = {require('./img/sample.jpg')}/> */}
         </View>
       </View>
     );

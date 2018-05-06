@@ -42,15 +42,8 @@ class HomeScreen extends React.Component {
     }
   }
 
-  // insertNewTime= (time) => {
-  //   this.setState({ data: [...this.state.data, time]});
-  //   global.data.push(time);
-  // }
 
   render() {
-    //const { params } = this.props.navigation.state;
-    //const eventParam = params ? params.eventParam : null; //if (params) params.otherParam,  else null
-    // const content = eventParam !== null ? (eventParam) =>  this.insertNewTime(eventParam) : null //supposed to auto add new event
     return (
 
       <View style={styles.container}>
