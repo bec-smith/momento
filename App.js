@@ -6,6 +6,8 @@ import Timeline from 'react-native-timeline-listview'
 
 import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
+import Login from './Login.js';
+
 
 global.data = [
   {
@@ -101,6 +103,9 @@ const RootStack = StackNavigator(
     },
     AddMoment: {
       screen: AddMoment,
+    },
+    Login: {
+      screen: Login,
     },
     ViewMoment: {
       screen: ViewMoment,
