@@ -149,11 +149,13 @@ class AddMoment extends React.Component {
             title="Done"
             onPress={() => {
 
-            //  this.setState( {time: this.state.time.format("MMMM Do YYYY")})
-              // if (this.state.time != null){
-              //   global.data.unshift(this.state);
-              // }
-              // this.props.navigation.navigate('Home');
+              this.setState( {time: this.state.time.format("MMMM Do YYYY")})
+               if (this.state.time != null){
+                 this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
+                               global.data.unshift(this.state);
+                             })               
+                           }
+               this.props.navigation.navigate('Home');
 
 
               console.log(this.state)
