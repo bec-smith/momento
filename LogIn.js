@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Image, Button, StyleSheet, Text, View } from 'react-native';
 import { AuthSession } from 'expo';
 
-const APP_ID = '186248128856893';
 
 class Login extends React.Component {
   state = {
@@ -13,6 +12,8 @@ class Login extends React.Component {
   };
 
   render() {
+    const APP_ID = '186248128856893';
+
     return (
       <View style = {styles.container}>
         <Text Login Screen </Text>
