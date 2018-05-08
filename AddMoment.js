@@ -153,7 +153,7 @@ class AddMoment extends React.Component {
                if (this.state.time != null){
                  this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
                                global.data.unshift(this.state);
-                             })               
+                             })
                            }
                this.props.navigation.navigate('Home');
 
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     paddingTop: 65,
   },
   smallInput: {
-    margin: 20,
+    marginVertical: 20,
     height: 34,
     paddingHorizontal: 10,
     borderRadius: 4,
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   largeInput: {
-    margin: 20,
+    marginVertical: 20,
     height: 80,
     paddingHorizontal: 10,
     borderRadius: 4,
