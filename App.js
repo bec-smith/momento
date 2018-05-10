@@ -9,6 +9,8 @@ import ViewMoment from './ViewMoment.js';
 import EditMoment from './EditMoment.js';
 import Login from './Login.js';
 
+console.disableYellowBox = true;
+
 global.nextMomentID = 5
 
 global.data = [
