@@ -158,20 +158,6 @@ class AddMoment extends React.Component {
               />
             </View>
             {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
-            <View style={{ paddingTop: 20 }}>
-              <Button
-                title="Done"
-                onPress={() => {
-                  this.setState( {time: this.state.time.format("MMMM Do YYYY")})
-                   if (this.state.time != null) {
-                     this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
-                                   global.data.unshift(this.state);
-                                 })
-                   }
-                   this.props.navigation.navigate('Home');
-                }}
-              />
-            </View>
           </View>
         </ScrollView>
       </View>
