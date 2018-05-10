@@ -5,17 +5,20 @@ import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 
-class AddMoment extends React.Component {
-  state = {
-    id: global.nextMomentID,
-    title: null,
-    time: Moment().startOf('day'),
-    description: null,
-    imageUrl: null,
-   };
+class EditMoment extends React.Component {
+  constructor(props) {
+    super(props);
+    const { params } = this.props.navigation.state;
+    this.state = {
+      id: params ? params.id : null,
+      title: params ? params.title : null,
+      time: params ? params.time : null,
+      description: params ? params.description : null,
+      imgUrl: params ? params.imgUrl : null,
+    }
+  }
 
   render() {
-    let { imageUrl } = this.state;
     const BLUE = '#2196F3';
     const WHITE = '#FFFFFF';
     const GREY = '#BDBDBD';
@@ -27,18 +30,33 @@ class AddMoment extends React.Component {
         <ScrollView>
           <NavigationBar
             title = {{
-              title: 'Add Moment',
+              title: 'Edit Moment',
             }}
             rightButton = {{
               title: 'Done',
               handler: () => {
-                if (this.state.time != null) {
+                if (typeof this.state.time === 'string') {
+                  this.editMoment();
+                  this.props.navigation.navigate('ViewMoment', {
+                    id: this.state.id,
+                    title: this.state.title,
+                    time: this.state.time,
+                    description: this.state.description,
+                    ingUrl: this.state.imgUrl,
+                  });
+                }
+                else if (this.state.time != null) {
                   this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
-                    this.addMoment();
-                    global.nextMomentID += 1;
+                    this.editMoment();
+                    this.props.navigation.navigate('ViewMoment', {
+                      id: this.state.id,
+                      title: this.state.title,
+                      time: this.state.time,
+                      description: this.state.description,
+                      ingUrl: this.state.imgUrl,
+                    });
                   })
                 }
-                this.props.navigation.navigate('Home');
               },
             }}
             leftButton = {{
@@ -153,7 +171,7 @@ class AddMoment extends React.Component {
                 onPress={this.pickFromGallery}
               />
             </View>
-            {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
+            {this.imgUrl && <Image source={{ uri: this.imgUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
           </View>
         </ScrollView>
       </View>
@@ -180,7 +198,14 @@ class AddMoment extends React.Component {
     }
   }
 
-  addMoment() {
+  editMoment() {
+    curID = this.state.id;
+    for (let i = 0; i < global.data.length; i++) {
+      if (curID === global.data[i].id) {
+        global.data.splice(i, 1);
+        break;
+      }
+    }
     newMomentDate = Moment(this.state.time);
     for (let i = 0; i < global.data.length; i++) {
       curMoment = global.data[i];
@@ -193,7 +218,6 @@ class AddMoment extends React.Component {
     global.data.push(this.state);
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -226,4 +250,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddMoment;
+export default EditMoment;
