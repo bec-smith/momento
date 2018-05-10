@@ -16,7 +16,7 @@ class ViewMoment extends React.Component {
     const title = params ? params.title : null;
     const time = params ? params.time : null;
     const description = params ? params.description : null;
-    const imgUrl = params ? params.imgUrl : null;
+    const imageUrl = params ? params.imageUrl : null;
     return (
       <View style = {styles.navbarContainer}>
         <NavigationBar
@@ -28,7 +28,7 @@ class ViewMoment extends React.Component {
                 title: title,
                 time: time,
                 description: description,
-                imgUrl: imgUrl,
+                imageUrl: imageUrl,
               });
             },
           }}
@@ -42,7 +42,7 @@ class ViewMoment extends React.Component {
           <Text>{time}</Text>
           <Text style = {styles.momentDescriptionText}>{description}</Text>
           <View style = {styles.imageGrid}>
-            {imgUrl && <Image source={{ uri: imgUrl }} style={styles.momentImage} />}
+            {imageUrl && <Image source={{ uri: imageUrl }} style={styles.momentImage} />}
           </View>
         </View>
       </View>

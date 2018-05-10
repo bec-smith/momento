@@ -53,7 +53,6 @@ class HomeScreen extends React.Component {
 
   render() {
     return (
-
       <View style={styles.container}>
       <View style={{
         alignItems: 'center',
@@ -75,7 +74,7 @@ class HomeScreen extends React.Component {
               title: event.title,
               time: event.time,
               description: event.description,
-              imgUrl: event.imageUrl,
+              imageUrl: event.imageUrl,
             });
           }}
           options={{

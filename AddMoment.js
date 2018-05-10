@@ -36,9 +36,9 @@ class AddMoment extends React.Component {
                   this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
                     this.addMoment();
                     global.nextMomentID += 1;
+                    this.props.navigation.navigate('Home');
                   })
                 }
-                this.props.navigation.navigate('Home');
               },
             }}
             leftButton = {{

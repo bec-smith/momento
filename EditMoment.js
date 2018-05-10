@@ -14,7 +14,7 @@ class EditMoment extends React.Component {
       title: params ? params.title : null,
       time: params ? params.time : null,
       description: params ? params.description : null,
-      imgUrl: params ? params.imgUrl : null,
+      imageUrl: params ? params.imageUrl : null,
     }
   }
 
@@ -42,7 +42,7 @@ class EditMoment extends React.Component {
                     title: this.state.title,
                     time: this.state.time,
                     description: this.state.description,
-                    ingUrl: this.state.imgUrl,
+                    imageUrl: this.state.imageUrl,
                   });
                 }
                 else if (this.state.time != null) {
@@ -53,7 +53,7 @@ class EditMoment extends React.Component {
                       title: this.state.title,
                       time: this.state.time,
                       description: this.state.description,
-                      ingUrl: this.state.imgUrl,
+                      imageUrl: this.state.imageUrl,
                     });
                   })
                 }
@@ -171,7 +171,7 @@ class EditMoment extends React.Component {
                 onPress={this.pickFromGallery}
               />
             </View>
-            {this.imgUrl && <Image source={{ uri: this.imgUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
+            {this.state.imageUrl && <Image source={{ uri: this.state.imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
           </View>
         </ScrollView>
       </View>
