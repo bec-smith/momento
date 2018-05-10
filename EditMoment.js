@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, Image, View, Button, ScrollView } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, Image, View, Button, ScrollView } from 'react-native';
 import { ImagePicker,Permissions } from 'expo';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
@@ -165,6 +165,14 @@ class EditMoment extends React.Component {
               blurOnSubmit={true}
 
             />
+            <View>
+              <Button
+                title="Delete Moment"
+                onPress={() => {
+                  this.deleteMoment();
+                }}
+              />
+            </View>
             <View style={{ paddingTop: 20 }}>
               <Button
                 title="Pick image from camera roll"
@@ -216,6 +224,17 @@ class EditMoment extends React.Component {
       }
     }
     global.data.push(this.state);
+  }
+
+  deleteMoment() {
+    curID = this.state.id;
+    for (let i = 0; i < global.data.length; i++) {
+      if (curID === global.data[i].id) {
+        global.data.splice(i, 1);
+        break;
+      }
+    }
+    this.props.navigation.navigate('Home');
   }
 }
 
