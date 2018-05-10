@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, Image, View, Button } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
+import NavigationBar from 'react-native-navbar';
 
 class ViewMoment extends React.Component {
   static navigationOptions = {
@@ -14,18 +15,24 @@ class ViewMoment extends React.Component {
     const description = params ? params.description : null;
     const imgUrl = params ? params.imgUrl : null;
     return (
-      <View style = {styles.momentContainer}>
-        <FontAwesome
-          style = {{ alignSelf: 'center' }}
-          size={30}
-          name='angle-down'
-          color='#000000'
+      <View style = {styles.navbarContainer}>
+        <NavigationBar
+          rightButton = {{
+            title: 'Edit',
+            handler: () => {this.props.navigation.goBack();},
+          }}
+          leftButton = {{
+            title: 'Back',
+            handler: () => {this.props.navigation.goBack();},
+          }}
         />
-        <Text style = {styles.momentTitleText}>{title}</Text>
-        <Text>{date}</Text>
-        <Text style = {styles.momentDescriptionText}>{description}</Text>
-        <View style = {styles.imageGrid}>
-          {imgUrl && <Image source={{ uri: imgUrl }} style={styles.momentImage} />}
+        <View style = {styles.momentContainer}>
+          <Text style = {styles.momentTitleText}>{title}</Text>
+          <Text>{date}</Text>
+          <Text style = {styles.momentDescriptionText}>{description}</Text>
+          <View style = {styles.imageGrid}>
+            {imgUrl && <Image source={{ uri: imgUrl }} style={styles.momentImage} />}
+          </View>
         </View>
       </View>
     );
@@ -40,8 +47,15 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   momentContainer: {
-    padding: 20,
-    paddingTop: 20,
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    flex: 1,
+  },
+  navbarContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 5,
   },
   imageGrid: {
     flexDirection: 'row',
