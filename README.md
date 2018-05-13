@@ -1,35 +1,16 @@
+function getFirstMomento(userName){
+	var userRef = firebase.database().ref('/users/' + userName +'/momentos');
+	userRef.once('value').then(function(snapshot){
+		var userValue = snapshot.val();
+		var momentoName = userValue[Object.keys(userValue)[0]];
+		//console.log(momentoName)
 
-function getfirstMomento(userName){
-	Promise.all(getUserMomentos(userName).then(function(snapshots) {
- 	//console.log("FUNCTIN KEYS,", snapshots);
- 	var appData = {}; 
-    for (key in snapshots){
-    	//console.log("KEY,", key)
-    	//console.log(snapshots[key]);
-		Promise.all(retrieveMomento(snapshots[key]).then(function(snapshots) {
- 		appData.key = snapshots;
-		console.log("snapshot,",appData);    
-		return appData;
-    }))
-    }    	
-    //console.log(appData);
-}))
-};
+		//now get first momento Name; 
 
-function getUserMomentos(userName){
-	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
-	return myRef.once('value').then(function(snapshot){
-		var peep = snapshot.val();
-		return peep;
+		//now get momento
+		var momentoRef = firebase.database().ref('/data/' + momentoName);
+		return momentoRef.once('value').then(function(snapshot){
+			return momento = snapshot.val();
+			//console.log(momento);
 	})
-}
-
-
-function retrieveMomento(momentoName){
-	var myRef = firebase.database().ref('/data/' + momentoName);
-	return myRef.once('value').then(function(snapshot){
-		var peep = snapshot.val();
-		//console.log(peep);
-		return peep;
-	})
-}
+})}
