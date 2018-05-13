@@ -54,12 +54,20 @@ class HomeScreen extends React.Component {
   }
 
   render() {
+    const { params } = this.props.navigation.state;
+    const user = params ? params.user : null;
+    const momentos = params ? params.momentos : null;
+
     return (
       <View style={styles.container}>
       <View style={{
         alignItems: 'center',
       }}>
       <Text style={styles.titleText}>Momento</Text>
+      <Text style={styles.titleText}>{user}</Text>
+      <Text style={styles.titleText}>{JSON.stringify(momentos)}</Text>
+
+
       </View>
         <Timeline
           style={styles.list}
@@ -123,7 +131,7 @@ const RootStack = StackNavigator(
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Login',
     headerMode: 'none',
     mode: 'modal', //makes screen slide up
 

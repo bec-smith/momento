@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "expo": "^26.0.0",
+    "firebase": "^5.0.2",
     "moment": "^2.22.1",
     "react": "16.3.0",
     "react-native": "~0.54.1",
@@ -27,6 +28,7 @@
     "react-native-elements": "^0.19.1",
     "react-native-google-sign-in": "^1.0.16",
     "react-native-google-signin": "^0.12.0",
+    "react-native-navbar": "^2.1.0",
     "react-native-timeline-listview": "^0.2.3",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.11"
