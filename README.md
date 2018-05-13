@@ -1,16 +1,11 @@
-# momento - bec's branch
+# momento - backend + frontend
 
 ## Updates so far:
 
-* Added the home screen for P5
+* Login Screen completed
+* User can login and we get their data from firebase! Wow
 
-* There's a timeline! Made w/ -> [react-native-timeline-listview](https://github.com/thegamenicorus/react-native-timeline-listview) 
+** Username: test6@fakeTest.com
+** Password: password
+* ^Press login, get taken to Home page (w/ timeline), two large text blocks should appear w/ the username and the user's moments
 
-* A button that will eventually take you to the 'create moment' screen -> Expo reccommends that we use [this](https://reactnavigation.org/) . Play around with it [here](https://expo.io/@react-navigation/NavigationPlayground)
-
-
-## TODO
-
-* make "Create Moment" screen
-* add navigation to this screen
-* figure out a way to actually add events to the timeline
