@@ -1,16 +1,35 @@
-# momento - bec's branch
 
-## Updates so far:
+function getfirstMomento(userName){
+	Promise.all(getUserMomentos(userName).then(function(snapshots) {
+ 	//console.log("FUNCTIN KEYS,", snapshots);
+ 	var appData = {}; 
+    for (key in snapshots){
+    	//console.log("KEY,", key)
+    	//console.log(snapshots[key]);
+		Promise.all(retrieveMomento(snapshots[key]).then(function(snapshots) {
+ 		appData.key = snapshots;
+		console.log("snapshot,",appData);    
+		return appData;
+    }))
+    }    	
+    //console.log(appData);
+}))
+};
 
-* Added the home screen for P5
+function getUserMomentos(userName){
+	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
+	return myRef.once('value').then(function(snapshot){
+		var peep = snapshot.val();
+		return peep;
+	})
+}
 
-* There's a timeline! Made w/ -> [react-native-timeline-listview](https://github.com/thegamenicorus/react-native-timeline-listview) 
 
-* A button that will eventually take you to the 'create moment' screen -> Expo reccommends that we use [this](https://reactnavigation.org/) . Play around with it [here](https://expo.io/@react-navigation/NavigationPlayground)
-
-
-## TODO
-
-* make "Create Moment" screen
-* add navigation to this screen
-* figure out a way to actually add events to the timeline
+function retrieveMomento(momentoName){
+	var myRef = firebase.database().ref('/data/' + momentoName);
+	return myRef.once('value').then(function(snapshot){
+		var peep = snapshot.val();
+		//console.log(peep);
+		return peep;
+	})
+}
