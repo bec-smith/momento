@@ -4,18 +4,20 @@ import { ImagePicker,Permissions } from 'expo';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
+import * as firebase from 'firebase';
+
 
 class AddMoment extends React.Component {
   state = {
-    id: global.nextMomentID,
     title: null,
     time: Moment().startOf('day'),
     description: null,
     imageUrl: null,
+    imageUri: null,
    };
 
   render() {
-    let { imageUrl } = this.state;
+    let { imageUri } = this.state;
     const BLUE = '#2196F3';
     const WHITE = '#FFFFFF';
     const GREY = '#BDBDBD';
@@ -35,7 +37,6 @@ class AddMoment extends React.Component {
                 if (this.state.time != null) {
                   this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
                     this.addMoment();
-                    global.nextMomentID += 1;
                     this.props.navigation.navigate('Home');
                   })
                 }
@@ -153,7 +154,7 @@ class AddMoment extends React.Component {
                 onPress={this.pickFromGallery}
               />
             </View>
-            {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
+            {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
           </View>
         </ScrollView>
       </View>
@@ -166,8 +167,9 @@ class AddMoment extends React.Component {
     });
 
     if (!result.cancelled) {
-      // console.log(result) returns only height, width, type, cancelled(t/f), and uri available
-      this.setState({ imageUrl: result.uri });
+      this.setState({ imageUri: result.uri });
+    //  uploadUrl = await uploadImageAsync(pickerResult.uri);
+      //this.setState({ imageUrl: uploadUrl });
     }
   };
 
@@ -180,19 +182,56 @@ class AddMoment extends React.Component {
     }
   }
 
+//
+// async  uploadImageAsync(uri) {
+//   const response = await fetch(uri);
+//   const blob = await response.blob();
+//   const ref = global.storage
+//     .ref()
+//     .child(uuid.v4());
+//
+//   const snapshot = await ref.put(blob);
+//   return snapshot.downloadURL;
+// }
+
   addMoment() {
-    newMomentDate = Moment(this.state.time);
-    for (let i = 0; i < global.data.length; i++) {
-      curMoment = global.data[i];
-      curDate = Moment(curMoment.time)
-      if (newMomentDate.isSameOrAfter(curDate)) {
-        global.data.splice(i, 0, this.state);
-        return;
-      }
-    }
-    global.data.push(this.state);
-  }
+  //   newMomentDate = Moment(this.state.time);
+  //   for (let i = 0; i < global.data.length; i++) {
+  //     curMoment = global.data[i];
+  //     curDate = Moment(curMoment.time)
+  //     if (newMomentDate.isSameOrAfter(curDate)) {
+  //       global.data.splice(i, 0, this.state);
+  //       return;
+  //     }
+  //   }
+  //   global.data.push(this.state);
+  // }
+  this.pushMomento(this.state.title,
+    this.state.description,
+  //  this.state.imageUrl,
+    this.state.imageUri,
+    this.state.time,
+    global.timelineName);
+
 }
+
+pushMomento(title, description, imageURL, time, momentoName){
+
+	var myMomento = firebase.database().ref('/data/' + momentoName);
+//  console.log(momentoName);
+	myMomento.once('value').then(function(snapshot)
+	{
+		var numMomentos = snapshot.val();
+		var numMomentos = numMomentos[Object.keys(numMomentos)[0]];
+		//console.log(numMomentos);
+		myMomento.update({[numMomentos + 1]: {title: title, description: description, imageUrl: imageURL, time: time}});
+		myMomento.update({0: numMomentos +1});
+	})
+}
+
+
+}
+
 
 
 const styles = StyleSheet.create({

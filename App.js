@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, Image, View, TouchableHighlight, ScrollVie
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 import Timeline from 'react-native-timeline-listview'
+import * as firebase from 'firebase';
 
 import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
@@ -11,103 +12,95 @@ import Login from './Login.js';
 
 console.disableYellowBox = true;
 
-global.nextMomentID = 5
 
 global.data = [
   {
     id: 4,
-    time: 'Apr 28, 2018',
-    title: 'Beach Day!',
-    description: 'Day trip to Santa Cruz :) 🏖🌊',
+    time: 'FAIL',
+    title: 'FAIL',
+    description: 'FAIL',
     imageUrl: 'https://www.atlantisbahamas.com/media/Things%20To%20Do/Water%20Park/Beaches/Hero/Experiences_Beach.jpg'
   },
-  {
-    id: 3,
-    time: 'Apr 26, 2018',
-    title: 'Anniversary Dinner🍴😍',
-    description: 'Dinner at Alexander\'s Steakhouse for 3 year anniversary!',
-    imageUrl: 'http://www.goldcoastrealty-chicago.com/images/19399927_s_450.jpg'
-  },
-  {
-    id: 2,
-    time: 'Feb 14, 2018',
-    title: 'Valentine\'s Day 💕💘',
-    description: 'We saw a movie and had dinner',
-    imageUrl: 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/18/02/3200x2133/gallery-1515434402-valentinesdayfacts.jpg?resize=980:*'
-  },
-  {
-    id: 1,
-    time: 'Jan 1, 2018',
-    title: 'New Years Party 🎉',
-    description: 'We kissed under the stars',
-    imageUrl: 'http://huntsvilleadventures.com/wp-content/uploads/2017/09/Fireworks.jpg'
-  }
 ]
+
 
 class HomeScreen extends React.Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props);
     this.state = {
-      data: global.data
-    }
+      isLoading: true
+    };
+  }
+
+  componentDidMount() {
+    var momentoRef = firebase.database().ref('/data/' + global.timelineName);
+    momentoRef.once('value').then(function(snapshot) {
+      momento = snapshot.val()
+      if (momento.length > 0) {
+        global.data = momento.slice(1);
+      } else {
+        global.data = [];
+      }
+      this.setState({
+        isLoading: false
+      });
+     }.bind(this))
   }
 
   render() {
-    const { params } = this.props.navigation.state;
-    const user = params ? params.user : null;
-    const momentos = params ? params.momentos : null;
+    if (this.state.isLoading) {
+      return <View><Text>Loading...</Text></View>;
+    }
+    else {
+      return (
+        <View style={styles.container}>
+        <View style={{
+          alignItems: 'center',
+        }}>
+        <Text style={styles.titleText}>Momento</Text>
 
-    return (
-      <View style={styles.container}>
-      <View style={{
-        alignItems: 'center',
-      }}>
-      <Text style={styles.titleText}>Momento</Text>
-      <Text style={styles.titleText}>{user}</Text>
-      <Text style={styles.titleText}>{JSON.stringify(momentos)}</Text>
-
-
-      </View>
-        <Timeline
-          style={styles.list}
-          data={this.state.data}
-          circleSize={20}
-          circleColor='rgb(45,156,219)'
-          lineColor='rgb(45,156,219)'
-          timeContainerStyle={{minWidth: 100, marginTop: -5}}
-          timeStyle={{textAlign: 'center', backgroundColor:'#349DD8', color:'white', padding:5, borderRadius:13}}
-          descriptionStyle={{color:'gray'}}
-          onEventPress={(event) => {
-            this.props.navigation.navigate('ViewMoment', {
-              id: event.id,
-              title: event.title,
-              time: event.time,
-              description: event.description,
-              imageUrl: event.imageUrl,
-            });
-          }}
-          options={{
-            style:{paddingTop:5}
-          }}
-        />
-
-        <View style={styles.buttons}>
-          <TouchableHighlight
-            onPress={() => {this.props.navigation.navigate('AddMoment');}}
-            style = {styles.button}
-          >
-           <FontAwesome
-             size={30}
-             name='plus-circle'
-             color='#349DD8'
-           />
-
-         </TouchableHighlight>
         </View>
+          <Timeline
+            style={styles.list}
+            data={global.data}
+            circleSize={20}
+            circleColor='rgb(45,156,219)'
+            lineColor='rgb(45,156,219)'
+            timeContainerStyle={{minWidth: 100, marginTop: -5}}
+            timeStyle={{textAlign: 'center', backgroundColor:'#349DD8', color:'white', padding:5, borderRadius:13}}
+            descriptionStyle={{color:'gray'}}
+            onEventPress={(event) => {
+              this.props.navigation.navigate('ViewMoment', {
+                id: event.id,
+                title: event.title,
+                time: event.time,
+                description: event.description,
+                imageUrl: event.imageUrl,
+              });
+            }}
+            options={{
+              style:{paddingTop:5}
+            }}
+          />
 
-      </View>
-    );
+          <View style={styles.buttons}>
+            <TouchableHighlight
+              onPress={() => {this.props.navigation.navigate('AddMoment');}}
+              style = {styles.button}
+            >
+             <FontAwesome
+               size={30}
+               name='plus-circle'
+               color='#349DD8'
+             />
+
+           </TouchableHighlight>
+          </View>
+
+        </View>
+      );
+    }
   }
 
 }
@@ -154,6 +147,12 @@ const styles = StyleSheet.create({
   titleText:{
     fontFamily: 'Baskerville',
     fontSize: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  userText:{
+    fontSize: 20,
+    color: 'blue',
     alignItems: 'center',
     justifyContent: 'center',
   },

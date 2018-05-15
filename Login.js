@@ -12,20 +12,20 @@ global.config = {
     messagingSenderId: "765289385147"
 };
 firebase.initializeApp(global.config);
+global.storage = firebase.storage();
 global.database = firebase.database();
 
 class Login extends React.Component {
   constructor(props) {
      super(props);
-     this.doSomething = this.doSomething.bind(this);
      this.getUserMomentos = this.getUserMomentos.bind(this);
 
      this.onLogin = this.onLogin.bind(this);
 
 
      this.state = {
-       email: '',
-       password: '',
+       email: 'test6@fakeTest.com',
+       password: 'password',
        momentos: '',
      };
 
@@ -77,9 +77,9 @@ onLogin() {
   //Alert.alert('Credentials', `email: ${email} + password: ${password}`);
   this.signIn(email,password)
 
-   Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
-    this.doSomething(email,snapshots)
- }.bind(this)))
+  Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
+    this.props.navigation.navigate('Home');
+  }.bind(this)))
 
 
 }
@@ -103,22 +103,8 @@ signIn(email, password){
 
 
 getUserMomentos(momentoName){
-    momentoName = Object.keys(momentoName)[0];
-    console.log("MomentoName,", momentoName);
-    var momentoRef = firebase.database().ref('/data/' + momentoName);
-    return momentoRef.once('value').then(function(snapshot){
-    momento = snapshot.val()
-    console.log(momento)
-       return momento;
-     }.bind(this))
-}
-
-
-doSomething(email,snapshots){
-  this.props.navigation.navigate('Home', {
-   user: email,
-   momentos: snapshots,
- });
+    momentoName = momentoName[Object.keys(momentoName)[0]];
+    global.timelineName = momentoName;
 }
 
 
@@ -128,43 +114,6 @@ emailToHeader(email){
 headerToEmail(header){
  return header.replace("*-*",".");
 }
-
-// getfirstMomento(userName)
-// {
-//  Promise.all(getUserMomentos(userName).then(function(snapshots)
-//  {
-//    //console.log("FUNCTIN KEYS,", snapshots);
-//   var appData = {};
-//   for (key in snapshots)
-//   { //console.log("KEY,", key) //console.log(snapshots[key]);
-//         Promise.all(retrieveMomento(snapshots[key]).then(function(snapshots)
-//         { appData.key = snapshots; console.log("snapshot,",appData);
-//         return appData;
-//        }
-//      ))
-//    }
-//    //console.log(appData);
-//  }))
-// };
-//
-// getUserMomentos(userName)
-// {
-//    var myRef = firebase.database().ref('/users/' + userName +'/momentos');
-//    return myRef.once('value').then(function(snapshot){
-//    var peep = snapshot.val();
-//    return peep; })
-// }
-//
-// retrieveMomento(momentoName)
-// {
-//  var myRef = firebase.database().ref('/data/' + momentoName);
-//  return myRef.once('value').then(function(snapshot){
-//    var peep = snapshot.val();
-//    //console.log(peep);
-//    return peep;
-//  })
-// }
-
 
 
 }
