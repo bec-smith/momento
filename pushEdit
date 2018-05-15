@@ -1,0 +1,16 @@
+function pushMomento(title, description, imageURL, time, momentoName){
+
+	var myMomento = firebase.database().ref('/data/' + momentoName);
+	myMomento.once('value').then(function(snapshot)
+	{
+		var numMomentos = snapshot.val();
+		var numMomentos = numMomentos[Object.keys(numMomentos)[0]];
+		console.log(numMomentos);
+		myMomento.update({[numMomentos + 1]: {title: title, description: description, imageUrl: imageURL, time: time}});
+		myMomento.update({0: numMomentos +1});
+	})
+}
+
+
+
+pushMomento("title", "THIS IS A TEST", "IMAGESSSSS", "8/9/10","momento1", "6"); 
