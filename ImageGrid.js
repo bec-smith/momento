@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View, Dimensions } from 'react-native';
+import { StyleSheet, Image, View, Dimensions, Text } from 'react-native';
 
 const IMAGES_PER_ROW = 3;
-const win = Dimensions.get('window');
-const IMG_LENGTH = win / 3;
+const winWidth = Dimensions.get('window').width;
+const IMG_LENGTH = winWidth / 3;
 
 class ImageGrid extends React.Component {
   constructor(props) {
     super(props);
     images = this.props.images ? this.props.images : null;
+    console.log(images);
     this.state = {
       rows: this.generateImageRows(images),
     }
-    console.log(rows);
+    console.log(IMG_LENGTH);
   }
 
   render() {
     return (
       <View>
         {this.state.rows.map((row, key) => (
-          <View style={styles.row}>
-            {row.map((image, key) => (
-              <Image source={{uri: image }} style={styles.image} />
-            ))}
+          <View key={key} style={styles.row}>
+            {row.length > 0 && <Image source={{uri: row[0].uri}} style={styles.image} resizeMode="contain"/>}
+            {row.length > 1 && <Image source={{uri: row[1].uri}} style={styles.centerImage} resizeMode="contain"/>}
+            {row.length > 2 && <Image source={{uri: row[2].uri}} style={styles.image} resizeMode="contain"/>}
           </View>
         ))}
       </View>
@@ -60,12 +61,11 @@ const styles = StyleSheet.create({
     height: IMG_LENGTH,
   },
   centerImage: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 1,
     width: IMG_LENGTH,
     height: IMG_LENGTH,
   },
   row: {
-    flex: 1,
     flexDirection: 'row',
     paddingBottom: 1,
   }

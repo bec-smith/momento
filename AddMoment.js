@@ -4,18 +4,26 @@ import { ImagePicker,Permissions } from 'expo';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
+import CameraRollPicker from 'react-native-camera-roll-picker';
+
+import ChooseImages from './ChooseImages.js';
+import ImageGrid from './ImageGrid.js';
 
 class AddMoment extends React.Component {
-  state = {
-    id: global.nextMomentID,
-    title: null,
-    time: Moment().startOf('day'),
-    description: null,
-    imageUrl: null,
-   };
+  constructor(props) {
+    super(props);
+    const { params } = this.props.navigation.state;
+    this.state = {
+      id: params ? params.id : null,
+      title: params ? params.title : null,
+      time: params ? params.time : Moment().startOf('day'),
+      description: params ? params.description : null,
+      images: params ? params.images : [],
+    };
+  }
 
   render() {
-    let { imageUrl } = this.state;
+    let { images } = this.state;
     const BLUE = '#2196F3';
     const WHITE = '#FFFFFF';
     const GREY = '#BDBDBD';
@@ -145,16 +153,22 @@ class AddMoment extends React.Component {
               numberOfLines = {4}
               returnKeyType="done"
               blurOnSubmit={true}
-
             />
             <View style={{ paddingTop: 20 }}>
               <Button
                 title="Pick image from camera roll"
-                onPress={this.pickFromGallery}
+                onPress={() => {this.props.navigation.navigate('ChooseImages', {
+                  id: this.state.id,
+                  title: this.state.title,
+                  time: this.state.time,
+                  description: this.state.description,
+                  images: this.state.images,
+                  num: this.state.images ? this.state.images.length : 0,
+                });}}
               />
             </View>
-            {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
           </View>
+          {this.state.images != null && this.state.images.length > 0 && <ImageGrid images={this.state.images} />}
         </ScrollView>
       </View>
     );
@@ -177,6 +191,17 @@ class AddMoment extends React.Component {
 
     if(status === 'granted') {
       this._pickImage()
+    }
+  }
+
+  getSelectedImages(images, current) {
+    var num = images.length;
+    this.setState({
+      num: num,
+      selected: images,
+    });
+    if (num == global.max) {
+     console.log(this.state.selected);
     }
   }
 
@@ -222,6 +247,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: '#ccc',
     borderWidth: 1,
+    fontSize: 16,
+  },
+  title: {
+    alignSelf: 'center',
     fontSize: 16,
   },
 });

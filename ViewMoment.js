@@ -3,6 +3,8 @@ import { StyleSheet, Text, Image, View, Button } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import NavigationBar from 'react-native-navbar';
 
+import ImageGrid from './ImageGrid.js'
+
 class ViewMoment extends React.Component {
 
   static navigationOptions = {
@@ -16,7 +18,7 @@ class ViewMoment extends React.Component {
     const title = params ? params.title : null;
     const time = params ? params.time : null;
     const description = params ? params.description : null;
-    const imageUrl = params ? params.imageUrl : null;
+    const images = params ? params.images : null;
     return (
       <View style = {styles.navbarContainer}>
         <NavigationBar
@@ -28,7 +30,7 @@ class ViewMoment extends React.Component {
                 title: title,
                 time: time,
                 description: description,
-                imageUrl: imageUrl,
+                images: images,
               });
             },
           }}
@@ -41,9 +43,10 @@ class ViewMoment extends React.Component {
           <Text style = {styles.momentTitleText}>{title}</Text>
           <Text>{time}</Text>
           <Text style = {styles.momentDescriptionText}>{description}</Text>
-          <View style = {styles.imageGrid}>
-            {imageUrl && <Image source={{ uri: imageUrl }} style={styles.momentImage} />}
-          </View>
+          <ImageGrid images={images}/>
+          {/* <View style = {styles.imageGrid}>
+            {images && <ImageGrid images = {images} />}
+          </View> */}
         </View>
       </View>
     );
