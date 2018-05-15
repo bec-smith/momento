@@ -51,7 +51,7 @@ class AddMoment extends React.Component {
             }}
             leftButton = {{
               title: 'Cancel',
-              handler: () => {this.props.navigation.goBack();},
+              handler: () => {this.props.navigation.navigate('Home');},
             }}
           />
           <View style={styles.container}>
@@ -156,7 +156,7 @@ class AddMoment extends React.Component {
             />
             <View style={{ paddingTop: 20 }}>
               <Button
-                title="Pick image from camera roll"
+                title="Upload images"
                 onPress={() => {this.props.navigation.navigate('ChooseImages', {
                   id: this.state.id,
                   title: this.state.title,
@@ -164,34 +164,15 @@ class AddMoment extends React.Component {
                   description: this.state.description,
                   images: this.state.images,
                   num: this.state.images ? this.state.images.length : 0,
+                  screenFrom: 'AddMoment',
                 });}}
               />
             </View>
           </View>
-          {this.state.images != null && this.state.images.length > 0 && <ImageGrid images={this.state.images} />}
+          <ImageGrid images={this.state.images} />
         </ScrollView>
       </View>
     );
-  }
-  _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if (!result.cancelled) {
-      // console.log(result) returns only height, width, type, cancelled(t/f), and uri available
-      this.setState({ imageUrl: result.uri });
-    }
-  };
-
-  pickFromGallery = async () => {
-    const permissions = Permissions.CAMERA_ROLL;
-    const { status } = await Permissions.askAsync(permissions);
-
-    if(status === 'granted') {
-      this._pickImage()
-    }
   }
 
   getSelectedImages(images, current) {

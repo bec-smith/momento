@@ -18,6 +18,7 @@ class ChooseImages extends React.Component {
        description: params ? params.description : null,
        selected: params.images ? params.images : [],
        num: params ? params.num : 0,
+       screenFrom: params ? params.screenFrom : 'Home'
      };
    }
 
@@ -31,7 +32,7 @@ class ChooseImages extends React.Component {
            rightButton = {{
              title: 'Done',
              handler: () => {
-               this.props.navigation.navigate('AddMoment', {
+               this.props.navigation.navigate(this.state.screenFrom, {
                  id: this.state.id,
                  title: this.state.title,
                  time: this.state.time,

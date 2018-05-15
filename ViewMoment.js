@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, Image, View, Button } from 'react-native';
+import { StyleSheet, Text, Image, View, Button, ScrollView } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import NavigationBar from 'react-native-navbar';
 
@@ -21,33 +21,32 @@ class ViewMoment extends React.Component {
     const images = params ? params.images : null;
     return (
       <View style = {styles.navbarContainer}>
-        <NavigationBar
-          rightButton = {{
-            title: 'Edit',
-            handler: () => {
-              this.props.navigation.navigate('EditMoment', {
-                id: id,
-                title: title,
-                time: time,
-                description: description,
-                images: images,
-              });
-            },
-          }}
-          leftButton = {{
-            title: 'Back',
-            handler: () => {this.props.navigation.navigate('Home');},
-          }}
-        />
-        <View style = {styles.momentContainer}>
-          <Text style = {styles.momentTitleText}>{title}</Text>
-          <Text>{time}</Text>
-          <Text style = {styles.momentDescriptionText}>{description}</Text>
+        <ScrollView>
+          <NavigationBar
+            rightButton = {{
+              title: 'Edit',
+              handler: () => {
+                this.props.navigation.navigate('EditMoment', {
+                  id: id,
+                  title: title,
+                  time: time,
+                  description: description,
+                  images: images,
+                });
+              },
+            }}
+            leftButton = {{
+              title: 'Back',
+              handler: () => {this.props.navigation.navigate('Home');},
+            }}
+          />
+          <View style = {styles.momentContainer}>
+            <Text style = {styles.momentTitleText}>{title}</Text>
+            <Text>{time}</Text>
+            <Text style = {styles.momentDescriptionText}>{description}</Text>
+          </View>
           <ImageGrid images={images}/>
-          {/* <View style = {styles.imageGrid}>
-            {images && <ImageGrid images = {images} />}
-          </View> */}
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -64,6 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 20,
     paddingTop: 10,
+    paddingBottom: 25,
     flex: 1,
   },
   navbarContainer: {

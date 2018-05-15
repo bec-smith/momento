@@ -3,17 +3,15 @@ import { StyleSheet, Image, View, Dimensions, Text } from 'react-native';
 
 const IMAGES_PER_ROW = 3;
 const winWidth = Dimensions.get('window').width;
-const IMG_LENGTH = winWidth / 3;
+const IMG_LENGTH = (winWidth / 3) - 2;
 
 class ImageGrid extends React.Component {
   constructor(props) {
     super(props);
     images = this.props.images ? this.props.images : null;
-    console.log(images);
     this.state = {
       rows: this.generateImageRows(images),
     }
-    console.log(IMG_LENGTH);
   }
 
   render() {
@@ -21,9 +19,9 @@ class ImageGrid extends React.Component {
       <View>
         {this.state.rows.map((row, key) => (
           <View key={key} style={styles.row}>
-            {row.length > 0 && <Image source={{uri: row[0].uri}} style={styles.image} resizeMode="contain"/>}
-            {row.length > 1 && <Image source={{uri: row[1].uri}} style={styles.centerImage} resizeMode="contain"/>}
-            {row.length > 2 && <Image source={{uri: row[2].uri}} style={styles.image} resizeMode="contain"/>}
+            {row.length > 0 && <Image source={{uri: row[0].uri}} style={styles.image} />}
+            {row.length > 1 && <View style={styles.centerImage}><Image source={{uri: row[1].uri}} style={styles.image} /></View>}
+            {row.length > 2 && <Image source={{uri: row[2].uri}} style={styles.image} />}
           </View>
         ))}
       </View>
@@ -31,10 +29,10 @@ class ImageGrid extends React.Component {
   }
 
   generateImageRows(images) {
-    if (images == null) {
-      return;
-    }
     rows = [];
+    if (images == null || images.length == 0) {
+      return rows;
+    }
     numRows = Math.floor(images.length / IMAGES_PER_ROW) + 1
     for (let i = 0; i < numRows; i++) {
       row = []
@@ -61,13 +59,11 @@ const styles = StyleSheet.create({
     height: IMG_LENGTH,
   },
   centerImage: {
-    paddingHorizontal: 1,
-    width: IMG_LENGTH,
-    height: IMG_LENGTH,
+    paddingHorizontal: 2,
   },
   row: {
     flexDirection: 'row',
-    paddingBottom: 1,
+    paddingBottom: 2,
   }
 });
 
