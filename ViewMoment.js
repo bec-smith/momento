@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, Image, View, Button } from 'react-native';
+import { StyleSheet, Text, Image, View, Button, ScrollView } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import NavigationBar from 'react-native-navbar';
+
+import ImageGrid from './ImageGrid.js'
 
 class ViewMoment extends React.Component {
 
@@ -16,35 +18,35 @@ class ViewMoment extends React.Component {
     const title = params ? params.title : null;
     const time = params ? params.time : null;
     const description = params ? params.description : null;
-    const imageUrl = params ? params.imageUrl : null;
+    const images = params ? params.images : null;
     return (
       <View style = {styles.navbarContainer}>
-        <NavigationBar
-          rightButton = {{
-            title: 'Edit',
-            handler: () => {
-              this.props.navigation.navigate('EditMoment', {
-                id: id,
-                title: title,
-                time: time,
-                description: description,
-                imageUrl: imageUrl,
-              });
-            },
-          }}
-          leftButton = {{
-            title: 'Back',
-            handler: () => {this.props.navigation.navigate('Home');},
-          }}
-        />
-        <View style = {styles.momentContainer}>
-          <Text style = {styles.momentTitleText}>{title}</Text>
-          <Text>{time}</Text>
-          <Text style = {styles.momentDescriptionText}>{description}</Text>
-          <View style = {styles.imageGrid}>
-            {imageUrl && <Image source={{ uri: imageUrl }} style={styles.momentImage} />}
+        <ScrollView>
+          <NavigationBar
+            rightButton = {{
+              title: 'Edit',
+              handler: () => {
+                this.props.navigation.navigate('EditMoment', {
+                  id: id,
+                  title: title,
+                  time: time,
+                  description: description,
+                  images: images,
+                });
+              },
+            }}
+            leftButton = {{
+              title: 'Back',
+              handler: () => {this.props.navigation.navigate('Home');},
+            }}
+          />
+          <View style = {styles.momentContainer}>
+            <Text style = {styles.momentTitleText}>{title}</Text>
+            <Text>{time}</Text>
+            <Text style = {styles.momentDescriptionText}>{description}</Text>
           </View>
-        </View>
+          <ImageGrid images={images}/>
+        </ScrollView>
       </View>
     );
   }
@@ -61,6 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 20,
     paddingTop: 10,
+    paddingBottom: 25,
     flex: 1,
   },
   navbarContainer: {

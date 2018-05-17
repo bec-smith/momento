@@ -8,6 +8,7 @@ import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
 import EditMoment from './EditMoment.js';
 import Login from './Login.js';
+import ChooseImages from './ChooseImages.js';
 
 console.disableYellowBox = true;
 
@@ -19,28 +20,28 @@ global.data = [
     time: 'Apr 28, 2018',
     title: 'Beach Day!',
     description: 'Day trip to Santa Cruz :) 🏖🌊',
-    imageUrl: 'https://www.atlantisbahamas.com/media/Things%20To%20Do/Water%20Park/Beaches/Hero/Experiences_Beach.jpg'
+    images: [{uri: 'https://www.atlantisbahamas.com/media/Things%20To%20Do/Water%20Park/Beaches/Hero/Experiences_Beach.jpg'}]
   },
   {
     id: 3,
     time: 'Apr 26, 2018',
     title: 'Anniversary Dinner🍴😍',
     description: 'Dinner at Alexander\'s Steakhouse for 3 year anniversary!',
-    imageUrl: 'http://www.goldcoastrealty-chicago.com/images/19399927_s_450.jpg'
+    images: [{uri: 'http://www.goldcoastrealty-chicago.com/images/19399927_s_450.jpg'}]
   },
   {
     id: 2,
     time: 'Feb 14, 2018',
     title: 'Valentine\'s Day 💕💘',
     description: 'We saw a movie and had dinner',
-    imageUrl: 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/18/02/3200x2133/gallery-1515434402-valentinesdayfacts.jpg?resize=980:*'
+    images: [{uri: 'https://hips.hearstapps.com/wdy.h-cdn.co/assets/18/02/3200x2133/gallery-1515434402-valentinesdayfacts.jpg?resize=980'}]
   },
   {
     id: 1,
     time: 'Jan 1, 2018',
     title: 'New Years Party 🎉',
     description: 'We kissed under the stars',
-    imageUrl: 'http://huntsvilleadventures.com/wp-content/uploads/2017/09/Fireworks.jpg'
+    images: [{uri: 'http://huntsvilleadventures.com/wp-content/uploads/2017/09/Fireworks.jpg'}]
   }
 ]
 
@@ -76,7 +77,7 @@ class HomeScreen extends React.Component {
               title: event.title,
               time: event.time,
               description: event.description,
-              imageUrl: event.imageUrl,
+              images: event.images,
             });
           }}
           options={{
@@ -120,6 +121,9 @@ const RootStack = StackNavigator(
     },
     EditMoment: {
       screen: EditMoment,
+    },
+    ChooseImages: {
+      screen: ChooseImages,
     },
   },
   {

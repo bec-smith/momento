@@ -5,6 +5,8 @@ import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 
+import ImageGrid from './ImageGrid.js'
+
 class EditMoment extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +16,7 @@ class EditMoment extends React.Component {
       title: params ? params.title : null,
       time: params ? params.time : null,
       description: params ? params.description : null,
-      imageUrl: params ? params.imageUrl : null,
+      images: params ? params.images : null,
     }
   }
 
@@ -42,7 +44,7 @@ class EditMoment extends React.Component {
                     title: this.state.title,
                     time: this.state.time,
                     description: this.state.description,
-                    imageUrl: this.state.imageUrl,
+                    images: this.state.images,
                   });
                 }
                 else if (this.state.time != null) {
@@ -53,7 +55,7 @@ class EditMoment extends React.Component {
                       title: this.state.title,
                       time: this.state.time,
                       description: this.state.description,
-                      imageUrl: this.state.imageUrl,
+                      images: this.state.images,
                     });
                   })
                 }
@@ -165,45 +167,33 @@ class EditMoment extends React.Component {
               blurOnSubmit={true}
 
             />
-            <View>
-              <Button
-                title="Delete Moment"
-                onPress={() => {
-                  this.deleteMoment();
-                }}
-              />
-            </View>
             <View style={{ paddingTop: 20 }}>
               <Button
-                title="Pick image from camera roll"
-                onPress={this.pickFromGallery}
+                title="Upload images"
+                onPress={() => {this.props.navigation.navigate('ChooseImages', {
+                  id: this.state.id,
+                  title: this.state.title,
+                  time: this.state.time,
+                  description: this.state.description,
+                  images: this.state.images,
+                  num: this.state.images ? this.state.images.length : 0,
+                  screenFrom: 'EditMoment',
+                });}}
               />
             </View>
-            {this.state.imageUrl && <Image source={{ uri: this.state.imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
+          </View>
+          <ImageGrid images={this.state.images} />
+          <View style={{paddingTop: 20}}>
+            <Button
+              title="Delete Moment"
+              onPress={() => {
+                this.deleteMoment();
+              }}
+            />
           </View>
         </ScrollView>
       </View>
     );
-  }
-  _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if (!result.cancelled) {
-      // console.log(result) returns only height, width, type, cancelled(t/f), and uri available
-      this.setState({ imageUrl: result.uri });
-    }
-  };
-
-  pickFromGallery = async () => {
-    const permissions = Permissions.CAMERA_ROLL;
-    const { status } = await Permissions.askAsync(permissions);
-
-    if(status === 'granted') {
-      this._pickImage()
-    }
   }
 
   editMoment() {
