@@ -9,6 +9,8 @@ import ViewMoment from './ViewMoment.js';
 import EditMoment from './EditMoment.js';
 import Login from './Login.js';
 import ChooseImages from './ChooseImages.js';
+import CreateAccount from './CreateAccount.js';
+import InviteUser from './InviteUser.js';
 
 console.disableYellowBox = true;
 
@@ -125,9 +127,15 @@ const RootStack = StackNavigator(
     ChooseImages: {
       screen: ChooseImages,
     },
+    CreateAccount: {
+      screen: CreateAccount,
+    },
+    InviteUser: {
+      screen: InviteUser,
+    }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'CreateAccount',
     headerMode: 'none',
     mode: 'modal', //makes screen slide up
 

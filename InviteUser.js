@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
-class CreateAccount extends React.Component {
-
+class InviteUser extends React.Component {
   constructor() {
     super();
     this.state = {
       email: "",
-      password: "",
       emailEmpty: true,
-      passwordEmpty: true,
     }
   }
 
@@ -18,8 +15,8 @@ class CreateAccount extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Text style={styles.titleText}>Welcome To</Text>
-          <Text style={styles.titleText}>Momento</Text>
+        <Text style={styles.titleText}>Invite Your</Text>
+          <Text style={styles.titleText}>Significant Other</Text>
 
           <TextInput
             value={this.state.email}
@@ -30,20 +27,11 @@ class CreateAccount extends React.Component {
             style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
           />
 
-          <TextInput
-            value={this.state.password}
-            onChangeText={(password) => this.setState({ password: password, passwordEmpty: password.length == 0 })}
-            placeholder={'password'}
-            secureTextEntry={true}
-            placeholderTextColor = 'red'
-            style={[this.state.passwordEmpty ? styles.invalidInput : styles.validInput]}
-          />
-
           <TouchableOpacity
             style={styles.button}
             onPress={this.onCreateAccount.bind(this)}
          >
-           <Text style={styles.buttonText}>Create Account</Text>
+           <Text style={styles.buttonText}>Invite</Text>
          </TouchableOpacity>
       </View>
       </TouchableWithoutFeedback>
@@ -52,8 +40,8 @@ class CreateAccount extends React.Component {
 
   onCreateAccount() {
     console.log("create account");
-    if (this.state.email.length != 0 && this.state.password.length != 0) {
-      this.state.navigation.navigate('InviteUser');
+    if (this.state.email.length != 0) {
+      this.state.navigation.navigate("InviteUser");
     }
   }
 
@@ -118,4 +106,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateAccount;
+export default InviteUser;
