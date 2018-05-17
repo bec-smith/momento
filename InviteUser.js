@@ -29,7 +29,7 @@ class InviteUser extends React.Component {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={this.onCreateAccount.bind(this)}
+            onPress={this.onInviteUser.bind(this)}
          >
            <Text style={styles.buttonText}>Invite</Text>
          </TouchableOpacity>
@@ -38,10 +38,10 @@ class InviteUser extends React.Component {
     );
   }
 
-  onCreateAccount() {
-    console.log("create account");
+  onInviteUser() {
     if (this.state.email.length != 0) {
-      this.state.navigation.navigate("InviteUser");
+      //Add user to Firebase
+      this.props.navigation.navigate('Home');
     }
   }
 
