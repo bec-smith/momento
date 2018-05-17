@@ -6,6 +6,7 @@ import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 import * as firebase from 'firebase';
 
+import { pushMomento } from './FirebaseHelper.js'
 
 class AddMoment extends React.Component {
   state = {
@@ -182,52 +183,25 @@ class AddMoment extends React.Component {
     }
   }
 
-//
-// async  uploadImageAsync(uri) {
-//   const response = await fetch(uri);
-//   const blob = await response.blob();
-//   const ref = global.storage
-//     .ref()
-//     .child(uuid.v4());
-//
-//   const snapshot = await ref.put(blob);
-//   return snapshot.downloadURL;
-// }
-
   addMoment() {
-  //   newMomentDate = Moment(this.state.time);
-  //   for (let i = 0; i < global.data.length; i++) {
-  //     curMoment = global.data[i];
-  //     curDate = Moment(curMoment.time)
-  //     if (newMomentDate.isSameOrAfter(curDate)) {
-  //       global.data.splice(i, 0, this.state);
-  //       return;
-  //     }
-  //   }
-  //   global.data.push(this.state);
-  // }
-  this.pushMomento(this.state.title,
-    this.state.description,
-  //  this.state.imageUrl,
-    this.state.imageUri,
-    this.state.time,
-    global.timelineName);
+    this.pushMomento(this.state.title,
+      this.state.description,
+      this.state.imageUri,
+      this.state.time,
+      global.timelineName);
+  }
 
-}
+  pushMomento(title, description, imageURL, time, momentoName) {
 
-pushMomento(title, description, imageURL, time, momentoName){
-
-	var myMomento = firebase.database().ref('/data/' + momentoName);
-//  console.log(momentoName);
-	myMomento.once('value').then(function(snapshot)
-	{
-		var numMomentos = snapshot.val();
-		var numMomentos = numMomentos[Object.keys(numMomentos)[0]];
-		//console.log(numMomentos);
-		myMomento.update({[numMomentos + 1]: {title: title, description: description, imageUrl: imageURL, time: time}});
-		myMomento.update({0: numMomentos +1});
-	})
-}
+  	var myMomento = firebase.database().ref('/data/' + momentoName);
+  	myMomento.once('value').then(function(snapshot)
+  	{
+  		var numMomentos = snapshot.val();
+  		var numMomentos = numMomentos[Object.keys(numMomentos)[0]];
+  		myMomento.update({[numMomentos + 1]: {title: title, description: description, images: imageURL, time: time, id: (numMomentos+1)}});
+  		myMomento.update({0: numMomentos +1});
+  	})
+  }
 
 
 }

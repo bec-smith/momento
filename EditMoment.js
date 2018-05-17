@@ -5,6 +5,8 @@ import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 
+import { deleteMomento } from './FirebaseHelper'
+
 class EditMoment extends React.Component {
   constructor(props) {
     super(props);
@@ -227,13 +229,14 @@ class EditMoment extends React.Component {
   }
 
   deleteMoment() {
-    curID = this.state.id;
-    for (let i = 0; i < global.data.length; i++) {
-      if (curID === global.data[i].id) {
-        global.data.splice(i, 1);
-        break;
-      }
-    }
+    // curID = this.state.id;
+    // for (let i = 0; i < global.data.length; i++) {
+    //   if (curID === global.data[i].id) {
+    //     global.data.splice(i, 1);
+    //     break;
+    //   }
+    // }
+    deleteMomento(this.state.title, this.state.id);
     this.props.navigation.navigate('Home');
   }
 }

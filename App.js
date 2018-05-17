@@ -71,6 +71,7 @@ class HomeScreen extends React.Component {
             timeStyle={{textAlign: 'center', backgroundColor:'#349DD8', color:'white', padding:5, borderRadius:13}}
             descriptionStyle={{color:'gray'}}
             onEventPress={(event) => {
+              console.log(event);
               this.props.navigation.navigate('ViewMoment', {
                 id: event.id,
                 title: event.title,
