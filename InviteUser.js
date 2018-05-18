@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import NavigationBar from 'react-native-navbar';
 
 class InviteUser extends React.Component {
   constructor() {
@@ -13,28 +14,36 @@ class InviteUser extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <Text style={styles.titleText}>Invite Your</Text>
-          <Text style={styles.titleText}>Significant Other</Text>
+      <View style={styles.navbar}>
+        <NavigationBar
+          leftButton = {{
+            title: 'Cancel',
+            handler: () => {this.props.navigation.goBack();},
+          }}
+        />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.container}>
+            <Text style={styles.titleText}>Invite Your</Text>
+            <Text style={styles.titleText}>Significant Other</Text>
 
-          <TextInput
-            value={this.state.email}
-            keyboardType = 'email-address'
-            onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
-            placeholder='email'
-            placeholderTextColor = 'red'
-            style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
-          />
+            <TextInput
+              value={this.state.email}
+              keyboardType = 'email-address'
+              onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
+              placeholder='email'
+              placeholderTextColor = 'red'
+              style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
+            />
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.onInviteUser.bind(this)}
-         >
-           <Text style={styles.buttonText}>Invite</Text>
-         </TouchableOpacity>
-        </View>
-      </TouchableWithoutFeedback>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={this.onInviteUser.bind(this)}
+           >
+             <Text style={styles.buttonText}>Invite</Text>
+           </TouchableOpacity>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
     );
   }
 
@@ -55,10 +64,15 @@ class InviteUser extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  navbar: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 5,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 115,
     backgroundColor: 'white',
   },
   titleText:{

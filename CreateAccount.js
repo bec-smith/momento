@@ -51,7 +51,7 @@ class CreateAccount extends React.Component {
                 style={styles.button}
                 onPress={this.onCreateAccount.bind(this)}
              >
-               <Text style={styles.buttonText}>Create New Account</Text>
+               <Text style={styles.buttonText}>Create Account</Text>
              </TouchableOpacity>
           </View>
         </View>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 115,
     backgroundColor: 'white',
   },
   titleText:{

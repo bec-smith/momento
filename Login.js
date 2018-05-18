@@ -45,9 +45,7 @@ render() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Text style={styles.titleText}>Hi, Welcome To</Text>
         <Text style={styles.titleText}>Momento</Text>
-
 
         <TextInput
           value={this.state.email}
@@ -76,7 +74,7 @@ render() {
           style={styles.button}
           onPress={this.onSignUp.bind(this)}>
 
-          <Text style={styles.buttonText}>Create Account</Text>
+          <Text style={styles.buttonText}>Create New Account</Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
@@ -148,6 +146,7 @@ const styles = StyleSheet.create({
   titleText:{
     fontFamily: 'Baskerville',
     fontSize: 50,
+    paddingBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
