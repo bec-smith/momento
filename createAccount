@@ -1,0 +1,35 @@
+function createAccount(email, password){ 
+	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+  		// Handle Errors here.
+  		var errorCode = error.code;
+  		var errorMessage = error.message;
+  		console.log(errorCode);
+  		//console.log("SUBMITTED");
+  	})
+	//if the userName already exists in the DataBase
+
+	var myRef = firebase.database().ref('/users/');
+	myRef.once('value').then(function(snapshot)
+	{
+		var data = snapshot.val();	
+		if(data[emailToHeader(userName)] !== undefined){
+			
+
+		}
+		//If the user does not exist, create them on the DataBase!
+		else{
+  			addUser(emailToHeader(email), "blue");
+
+		}
+	}
+
+};
+
+ function emailToHeader(email){
+ 	return email.replace(".","*-*");
+ }
+
+ function addUser(userName, color){
+	var myRef = firebase.database().ref('/users');
+	myRef.update({[userName]: {color: color, momentos: {defaultMomento: userName}}});
+}
