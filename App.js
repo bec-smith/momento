@@ -37,9 +37,16 @@ class HomeScreen extends React.Component {
     var momentoRef = firebase.database().ref('/data/' + global.timelineName);
     momentoRef.once('value').then(function(snapshot) {
       momento = snapshot.val()
-      if (momento.length > 0) {
-        global.data = momento.slice(1);
-      } else {
+      //console.log(momento)
+      var momentoKeys = Object.keys(momento)
+    //  console.log(momentoKeys)
+      var momentos = Object.values(momento)
+
+    //  console.log(momentos)
+      if (momentos.length > 0) {
+        global.data = momentos.slice(1);
+      }
+      else {
         global.data = [];
       }
       this.setState({
@@ -84,22 +91,38 @@ class HomeScreen extends React.Component {
               style:{paddingTop:5}
             }}
           />
+          <View style={{
+                 flex: 0.1,
+                 flexDirection: 'row',
+                 justifyContent: 'space-between',
+               }}>
 
-          <View style={styles.buttons}>
-            <TouchableHighlight
-              onPress={() => {this.props.navigation.navigate('AddMoment');}}
-              style = {styles.button}
-            >
-             <FontAwesome
-               size={30}
-               name='plus-circle'
-               color='#349DD8'
-             />
 
-           </TouchableHighlight>
+
+           <View style={styles.alignLeft}>
+             <TouchableHighlight onPress={() => {this.props.navigation.navigate('AddMoment');}}   >
+                <FontAwesome
+                  size={30}
+                  name='user-plus'
+                  color='#349DD8'
+                />
+            </TouchableHighlight>
+           </View>
+
+           <View style={styles.buttons}>
+                <TouchableHighlight  onPress={() => {this.props.navigation.navigate('AddMoment');}}  >
+                    <FontAwesome
+                      size={30}
+                      name='plus-circle'
+                      color='#349DD8'
+                    />
+               </TouchableHighlight>
           </View>
 
         </View>
+
+      </View>
+
       );
     }
   }
@@ -165,10 +188,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  alignLeft: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
   },
+
   title: {
      fontSize:16,
      fontWeight: 'bold'
