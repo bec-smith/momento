@@ -12,6 +12,8 @@ import EditMoment from './EditMoment.js';
 import Login from './Login.js';
 import CreateAccount from './CreateAccount.js';
 import InviteUser from './InviteUser.js';
+import ViewTimelines from './ViewTimelines.js';
+
 
 console.disableYellowBox = true;
 
@@ -75,13 +77,7 @@ class HomeScreen extends React.Component {
             rightButton = {{
               title: 'View Timelines',
               handler: () => {
-                this.props.navigation.navigate('EditMoment', {
-                  id: id,
-                  title: title,
-                  time: time,
-                  description: description,
-                  imageUrl: imageUrl,
-                });
+                this.props.navigation.navigate('ViewTimelines');
               },
             }}
             leftButton = {{
@@ -177,6 +173,9 @@ const RootStack = StackNavigator(
       InviteUser: {
      screen: InviteUser,
    },
+   ViewTimelines: {
+  screen: ViewTimelines,
+},
 
   },
   {

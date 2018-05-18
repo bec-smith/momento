@@ -229,14 +229,9 @@ class EditMoment extends React.Component {
   }
 
   deleteMoment() {
-    // curID = this.state.id;
-    // for (let i = 0; i < global.data.length; i++) {
-    //   if (curID === global.data[i].id) {
-    //     global.data.splice(i, 1);
-    //     break;
-    //   }
-    // }
-    deleteMomento(this.state.title, this.state.id);
+  // console.log(global.timelineName)
+  // console.log(this.state.id)
+    deleteMomento(global.timelineName, this.state.id);
     this.props.navigation.navigate('Home');
   }
 }

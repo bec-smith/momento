@@ -117,6 +117,8 @@ signIn(email, password){
 getUserMomentos(momentoName){
     momentoName = momentoName[Object.keys(momentoName)[0]];
     global.timelineName = momentoName;
+//    global.allTimelineNames = momentoName;
+
 }
 
 
