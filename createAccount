@@ -1,3 +1,5 @@
+
+//Create User Accounts
 function createAccount(email, password){ 
 	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
   		// Handle Errors here.
@@ -20,11 +22,14 @@ function createAccount(email, password){
 		//If the user does not exist, create them on the DataBase!
 		else{
   			addUser(emailToHeader(email), "blue");
+  			//Create them a default momento
+  			createMomento(default + emailToHeader(email));
 
 		}
 	})
 
 };
+
 
  function emailToHeader(email){
  	return email.replace(".","*-*");
@@ -33,6 +38,11 @@ function createAccount(email, password){
  function addUser(userName, color){
 	var myRef = firebase.database().ref('/users');
 	myRef.update({[userName]: {color: color, momentos: {defaultMomento: userName}}});
+}
+
+function createMomento(momentoName){
+	var myRef = firebase.database().ref('/data');
+	myRef.update({[momentoName]: {0: 0}});
 }
 
 
