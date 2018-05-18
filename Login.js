@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, Text, TouchableOpacity, TextInput, View, StyleSheet } from 'react-native';
+import { Alert, Button, Text, TouchableOpacity, TextInput, View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as firebase from 'firebase';
 
 
@@ -27,6 +27,8 @@ class Login extends React.Component {
        email: '',
        password: '',
        momentos: '',
+       emailEmpty: true,
+       passwordEmpty: true,
      };
 
    }
@@ -41,53 +43,56 @@ class Login extends React.Component {
 render() {
   const { params } = this.props.navigation.state;
   return (
-    <View style={styles.container}>
-    <Text style={styles.titleText}>Hi, Welcome To</Text>
-      <Text style={styles.titleText}>Momento</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <Text style={styles.titleText}>Hi, Welcome To</Text>
+        <Text style={styles.titleText}>Momento</Text>
 
 
-      <TextInput
-        value={this.state.email}
-        keyboardType = 'email-address'
-        onChangeText={(email) => this.setState({ email })}
-        placeholder='email'
-        placeholderTextColor = 'white'
-        style={styles.input}
-      />
-      <TextInput
-        value={this.state.password}
-        onChangeText={(password) => this.setState({ password })}
-        placeholder={'password'}
-        secureTextEntry={true}
-        placeholderTextColor = 'white'
-        style={styles.input}
-      />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={this.onLogin.bind(this)}
-     >
-       <Text style={styles.buttonText}>Login</Text>
-     </TouchableOpacity>
+        <TextInput
+          value={this.state.email}
+          keyboardType = 'email-address'
+          onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
+          placeholder='email'
+          placeholderTextColor = 'red'
+          style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
+        />
+        <TextInput
+          value={this.state.password}
+          onChangeText={(password) => this.setState({ password: password, passwordEmpty: password.length == 0 })}
+          placeholder={'password'}
+          secureTextEntry={true}
+          placeholderTextColor = 'red'
+          style={[this.state.passwordEmpty ? styles.invalidInput : styles.validInput]}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.onLogin.bind(this)}
+        >
+         <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
 
-     <TouchableOpacity
-       style={styles.button}
-       onPress={this.onSignUp.bind(this)}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.onSignUp.bind(this)}>
 
-      <Text style={styles.buttonText}>No Account? Create One Here!</Text>
-    </TouchableOpacity>
-
-    </View>
+          <Text style={styles.buttonText}>Create Account</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 onLogin() {
   const { email, password, momentos } = this.state;
   //Alert.alert('Credentials', `email: ${email} + password: ${password}`);
-  this.signIn(email,password)
+  if (this.state.emailEmpty || this.state.passwordEmpty) {
+    this.signIn(email,password)
 
-  Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
-    this.props.navigation.navigate('Home');
-  }.bind(this)))
+    Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
+      this.props.navigation.navigate('Home');
+    }.bind(this)))
+  }
 
 
 }
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'salmon',
+    backgroundColor: 'white',
   },
   titleText:{
     fontFamily: 'Baskerville',
@@ -163,14 +168,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  input: {
+  validInput: {
     width: 200,
     fontFamily: 'Baskerville',
     fontSize: 20,
     height: 44,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'black',
+    marginVertical: 10,
+  },
+  invalidInput: {
+    width: 200,
+    fontFamily: 'Baskerville',
+    fontSize: 20,
+    height: 44,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'red',
     marginVertical: 10,
   },
 });

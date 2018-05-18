@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity,TouchableHighlight, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import NavigationBar from 'react-native-navbar';
-import { Ionicons , FontAwesome} from '@expo/vector-icons';
-import * as firebase from 'firebase';
-
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 class InviteUser extends React.Component {
   constructor() {
@@ -18,10 +14,9 @@ class InviteUser extends React.Component {
     const { params } = this.props.navigation.state;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <Text style={styles.titleText}>Invite Your</Text>
+        <View style={styles.container}>
+          <Text style={styles.titleText}>Invite Your</Text>
           <Text style={styles.titleText}>Significant Other</Text>
-          <Text style={styles.subtitleText}>(They will log in with this email and we'll make a joint timeline for the two of you)</Text>
 
           <TextInput
             value={this.state.email}
@@ -38,25 +33,14 @@ class InviteUser extends React.Component {
          >
            <Text style={styles.buttonText}>Invite</Text>
          </TouchableOpacity>
-
-         <View style={styles.buttons}>
-              <TouchableHighlight  onPress={() => {this.props.navigation.navigate('Home');}}  >
-                  <FontAwesome
-                    size={30}
-                    name='home'
-                    color='white'
-                  />
-             </TouchableHighlight>
         </View>
-
-      </View>
       </TouchableWithoutFeedback>
     );
   }
 
   onInviteUser() {
     if (this.state.email.length != 0) {
-      this.inviteUserToMomento(this.emailToHeader(this.state.email), global.timelineName)
+      //Add user to Firebase
       this.props.navigation.navigate('Home');
     }
   }
@@ -68,66 +52,19 @@ class InviteUser extends React.Component {
   headerToEmail(header) {
    return header.replace("*-*",".");
   }
-
-
- preAddUSer(userName, momentoName){
-	var myRef = firebase.database().ref('/users');
-	myRef.update({[userName]: {color: "blue", momentos: {[momentoName]: momentoName}}});
 }
-
-//Helper function to "inviteUserToMomento." function -- associate a momento with a user account.
- grantUserMomento(userName, momentoName){
-	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
-	myRef.update({[momentoName]: momentoName});
-}
-
-
-//myMomento.update({[title]: {title: title, description: description, imageUrl: imageURL, time: time}});
-//BYDefault, you either create a "first momento," or join an already accessible momento
-
-//remember, call the "emailToHeader" method to get the proper username
- inviteUserToMomento(userName, momentoName){
-	var myRef = firebase.database().ref('/users/');
-	myRef.once('value').then(function(snapshot)
-	{
-		var data = snapshot.val();
-    console.log(data[this.emailToHeader(userName)]);
-		//If user exists, add the momento to their "list of momentos"
-		if(data[this.emailToHeader(userName)] !== undefined){
-			this.grantUserMomento(userName, momentoName);
-		}
-		//If the user does not exist, create them on the DataBase!
-		else{
-			this.preAddUSer(userName, momentoName);
-		}
-	}.bind(this))
-}
-}
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'salmon',
+    backgroundColor: 'white',
   },
   titleText:{
     fontFamily: 'Baskerville',
     fontSize: 50,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  subtitleText:{
-    padding: 10,
-    fontFamily: 'Baskerville',
-    fontSize: 20,
-    fontStyle: 'italic',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttons: {
-    alignItems: 'flex-end',
     justifyContent: 'center',
   },
   button: {
@@ -154,7 +91,7 @@ const styles = StyleSheet.create({
     height: 44,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'black',
     marginVertical: 10,
   },
   invalidInput: {
