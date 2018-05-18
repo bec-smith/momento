@@ -1,0 +1,13 @@
+function getUserMomentos(userName){
+	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
+	return myRef.once('value').then(function(snapshot){
+		var peep = snapshot.val();
+		return peep;
+	})
+}
+
+
+Promise.all(getUserMomentos("TEsY").then(function(snapshots) {
+    var momentos = snapshots;
+    console.log(momentos);
+}))
