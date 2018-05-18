@@ -24,8 +24,8 @@ class Login extends React.Component {
 
 
      this.state = {
-       email: 'test6@fakeTest.com',
-       password: 'password',
+       email: '',
+       password: '',
        momentos: '',
      };
 
@@ -44,6 +44,8 @@ render() {
     <View style={styles.container}>
     <Text style={styles.titleText}>Hi, Welcome To</Text>
       <Text style={styles.titleText}>Momento</Text>
+
+
       <TextInput
         value={this.state.email}
         keyboardType = 'email-address'
@@ -60,13 +62,19 @@ render() {
         placeholderTextColor = 'white'
         style={styles.input}
       />
-
       <TouchableOpacity
         style={styles.button}
         onPress={this.onLogin.bind(this)}
      >
        <Text style={styles.buttonText}>Login</Text>
      </TouchableOpacity>
+
+     <TouchableOpacity
+       style={styles.button}
+       onPress={this.onSignUp.bind(this)}>
+
+      <Text style={styles.buttonText}>No Account? Create One Here!</Text>
+    </TouchableOpacity>
 
     </View>
   );
@@ -82,6 +90,10 @@ onLogin() {
   }.bind(this)))
 
 
+}
+
+onSignUp() {
+    this.props.navigation.navigate('CreateAccount');
 }
 
 signIn(email, password){
@@ -134,13 +146,13 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: 'powderblue',
-    width: 200,
+  //  width: 200,
     height: 44,
     padding: 10,
     borderWidth: 1,
     borderColor: 'white',
     borderRadius: 25,
-    marginBottom: 10,
+    marginBottom: 25,
   },
   buttonText:{
     fontFamily: 'Baskerville',

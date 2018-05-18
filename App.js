@@ -4,11 +4,14 @@ import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 import Timeline from 'react-native-timeline-listview'
 import * as firebase from 'firebase';
+import NavigationBar from 'react-native-navbar';
 
 import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
 import EditMoment from './EditMoment.js';
 import Login from './Login.js';
+import CreateAccount from './CreateAccount.js';
+import InviteUser from './InviteUser.js';
 
 console.disableYellowBox = true;
 
@@ -55,13 +58,37 @@ class HomeScreen extends React.Component {
      }.bind(this))
   }
 
+  logout()
+  {
+    firebase.auth().signOut()
+    this.props.navigation.navigate('Login')
+  }
+
   render() {
     if (this.state.isLoading) {
-      return <View><Text>Loading...</Text></View>;
+      return <View><Text style={styles.titleText}>Loading...</Text></View>;
     }
     else {
       return (
         <View style={styles.container}>
+          <NavigationBar
+            rightButton = {{
+              title: 'View Timelines',
+              handler: () => {
+                this.props.navigation.navigate('EditMoment', {
+                  id: id,
+                  title: title,
+                  time: time,
+                  description: description,
+                  imageUrl: imageUrl,
+                });
+              },
+            }}
+            leftButton = {{
+              title: 'Logout',
+              handler: () => {this.logout()},
+            }}
+          />
         <View style={{
           alignItems: 'center',
         }}>
@@ -97,10 +124,8 @@ class HomeScreen extends React.Component {
                  justifyContent: 'space-between',
                }}>
 
-
-
            <View style={styles.alignLeft}>
-             <TouchableHighlight onPress={() => {this.props.navigation.navigate('AddMoment');}}   >
+             <TouchableHighlight onPress={() => {this.props.navigation.navigate('InviteUser');}}   >
                 <FontAwesome
                   size={30}
                   name='user-plus'
@@ -146,6 +171,13 @@ const RootStack = StackNavigator(
     EditMoment: {
       screen: EditMoment,
     },
+    CreateAccount: {
+   screen: CreateAccount,
+    },
+      InviteUser: {
+     screen: InviteUser,
+   },
+
   },
   {
     initialRouteName: 'Login',
