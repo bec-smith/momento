@@ -9,11 +9,22 @@ import { getTimelines } from './FirebaseHelper'
 class ViewTimelines extends React.Component {
 
   render() {
+    //console.log(global.allTimelineNames)
+    console.log(global.timelineName)
     return (
       <View style={styles.container}>
         <Text style={styles.titleText}>Timelines You Have Access To</Text>
         <ScrollView>
 
+
+{/*
+
+  // global.allTimelineNames  is an array of all the Timelines a user has access to
+  // make a clickable array so that when clicked, global.timelineName is set
+  // to whatever that thing is
+
+
+  */}
 
         </ScrollView>
       </View>
