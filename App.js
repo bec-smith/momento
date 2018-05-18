@@ -62,8 +62,8 @@ class HomeScreen extends React.Component {
 
   logout()
   {
-    firebase.auth().signOut()
-    this.props.navigation.navigate('Login')
+    firebase.auth().signOut();
+    this.props.navigation.navigate('Login');
   }
 
   render() {
@@ -72,7 +72,7 @@ class HomeScreen extends React.Component {
     }
     else {
       return (
-        <View style={styles.container}>
+        <View style={styles.navbar}>
           <NavigationBar
             rightButton = {{
               title: 'View Timelines',
@@ -85,64 +85,61 @@ class HomeScreen extends React.Component {
               handler: () => {this.logout()},
             }}
           />
-        <View style={{
-          alignItems: 'center',
-        }}>
-        <Text style={styles.titleText}>Momento</Text>
+          <View style={styles.container}>
+            <View style={{alignItems: 'center',}}>
+              <Text style={styles.titleText}>Momento</Text>
+            </View>
+            <Timeline
+              style={styles.list}
+              data={global.data}
+              circleSize={20}
+              circleColor='rgb(45,156,219)'
+              lineColor='rgb(45,156,219)'
+              timeContainerStyle={{minWidth: 100, marginTop: -5}}
+              timeStyle={{textAlign: 'center', backgroundColor:'#349DD8', color:'white', padding:5, borderRadius:13}}
+              descriptionStyle={{color:'gray'}}
+              onEventPress={(event) => {
+                console.log(event);
+                this.props.navigation.navigate('ViewMoment', {
+                  id: event.id,
+                  title: event.title,
+                  time: event.time,
+                  description: event.description,
+                  imageUrl: event.imageUrl,
+                });
+              }}
+              options={{
+                style:{paddingTop:5}
+              }}
+            />
+            <View style={{
+                   flex: 0.1,
+                   flexDirection: 'row',
+                   justifyContent: 'space-between',
+                 }}>
 
-        </View>
-          <Timeline
-            style={styles.list}
-            data={global.data}
-            circleSize={20}
-            circleColor='rgb(45,156,219)'
-            lineColor='rgb(45,156,219)'
-            timeContainerStyle={{minWidth: 100, marginTop: -5}}
-            timeStyle={{textAlign: 'center', backgroundColor:'#349DD8', color:'white', padding:5, borderRadius:13}}
-            descriptionStyle={{color:'gray'}}
-            onEventPress={(event) => {
-              console.log(event);
-              this.props.navigation.navigate('ViewMoment', {
-                id: event.id,
-                title: event.title,
-                time: event.time,
-                description: event.description,
-                imageUrl: event.imageUrl,
-              });
-            }}
-            options={{
-              style:{paddingTop:5}
-            }}
-          />
-          <View style={{
-                 flex: 0.1,
-                 flexDirection: 'row',
-                 justifyContent: 'space-between',
-               }}>
-
-           <View style={styles.alignLeft}>
-             <TouchableHighlight onPress={() => {this.props.navigation.navigate('InviteUser');}}   >
-                <FontAwesome
-                  size={30}
-                  name='user-plus'
-                  color='#349DD8'
-                />
-            </TouchableHighlight>
-           </View>
-
-           <View style={styles.buttons}>
-                <TouchableHighlight  onPress={() => {this.props.navigation.navigate('AddMoment');}}  >
+               <View style={styles.alignLeft}>
+                 <TouchableHighlight onPress={() => {this.props.navigation.navigate('InviteUser');}}   >
                     <FontAwesome
                       size={30}
-                      name='plus-circle'
+                      name='user-plus'
                       color='#349DD8'
                     />
-               </TouchableHighlight>
+                </TouchableHighlight>
+               </View>
+
+               <View style={styles.buttons}>
+                    <TouchableHighlight  onPress={() => {this.props.navigation.navigate('AddMoment');}}  >
+                        <FontAwesome
+                          size={30}
+                          name='plus-circle'
+                          color='#349DD8'
+                        />
+                   </TouchableHighlight>
+              </View>
+            </View>
           </View>
-
         </View>
-
-      </View>
 
       );
     }
@@ -193,11 +190,16 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  navbar: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 5,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
     padding: 20,
-    paddingTop: 65,
+    paddingTop: 25,
   },
   titleText:{
     fontFamily: 'Baskerville',

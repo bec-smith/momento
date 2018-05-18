@@ -86,7 +86,7 @@ render() {
 onLogin() {
   const { email, password, momentos } = this.state;
   //Alert.alert('Credentials', `email: ${email} + password: ${password}`);
-  if (this.state.emailEmpty || this.state.passwordEmpty) {
+  if (!this.state.emailEmpty && !this.state.passwordEmpty) {
     this.signIn(email,password)
 
     Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
