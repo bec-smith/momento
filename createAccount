@@ -12,7 +12,8 @@ function createAccount(email, password){
 	myRef.once('value').then(function(snapshot)
 	{
 		var data = snapshot.val();	
-		if(data[emailToHeader(userName)] !== undefined){
+		console.log(data);
+		if(data[emailToHeader(email)] !== undefined){
 			
 
 		}
@@ -21,8 +22,7 @@ function createAccount(email, password){
   			addUser(emailToHeader(email), "blue");
 
 		}
-	}
-	signIn(email, password);
+	})
 
 };
 
@@ -34,3 +34,7 @@ function createAccount(email, password){
 	var myRef = firebase.database().ref('/users');
 	myRef.update({[userName]: {color: color, momentos: {defaultMomento: userName}}});
 }
+
+
+
+createAccount("bec4@test.com", "password");
