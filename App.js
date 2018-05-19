@@ -53,6 +53,8 @@ class HomeScreen extends React.Component {
             return moment2.diff(moment1);
           }
         );
+        console.log("-------------------")
+        console.log(global.data);
       }
       else {
         global.data = [];

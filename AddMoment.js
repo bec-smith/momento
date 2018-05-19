@@ -200,8 +200,6 @@ Promise.all(pushMomento(this.state.title,
 
 
 
-
-
 }
 
 
