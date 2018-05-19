@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation';
 import Timeline from 'react-native-timeline-listview'
 import * as firebase from 'firebase';
 import NavigationBar from 'react-native-navbar';
+import Moment from 'moment';
 
 import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
@@ -42,14 +43,17 @@ class HomeScreen extends React.Component {
     var momentoRef = firebase.database().ref('/data/' + global.timelineName);
     momentoRef.once('value').then(function(snapshot) {
       momento = snapshot.val()
-      //console.log(momento)
-      var momentoKeys = Object.keys(momento)
-    //  console.log(momentoKeys)
-      var momentos = Object.values(momento)
+      momentos = Object.values(momento)
 
-    //  console.log(momentos)
       if (momentos.length > 0) {
         global.data = momentos.slice(1);
+        global.data.sort(
+          function(moment1, moment2) {
+            moment1 = Moment(moment1.time);
+            moment2 = Moment(moment2.time);
+            return moment2.diff(moment1);
+          }
+        );
       }
       else {
         global.data = [];
@@ -99,7 +103,6 @@ class HomeScreen extends React.Component {
               timeStyle={{textAlign: 'center', backgroundColor:'#349DD8', color:'white', padding:5, borderRadius:13}}
               descriptionStyle={{color:'gray'}}
               onEventPress={(event) => {
-                console.log(event);
                 this.props.navigation.navigate('ViewMoment', {
                   id: event.id,
                   title: event.title,

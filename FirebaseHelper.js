@@ -26,17 +26,15 @@ export function deleteMomento(momentoName, id) {
 	myRef.child(id).remove();
 }
 
-
-
 //Helper function to "inviteUserToMomento." A function that creates a new user on the dataBase (but not in the authentication portion) to represent
 //that a user has been invited to join a momento.
-export function preAddUSer(userName, momentoName) {
+function preAddUSer(userName, momentoName) {
 	var myRef = firebase.database().ref('/users');
 	myRef.update({[userName]: {color: "blue", momentos: {[momentoName]: momentoName}}});
 }
 
 //Helper function to "inviteUserToMomento." function -- associate a momento with a user account.
-export function grantUserMomento(userName, momentoName) {
+function grantUserMomento(userName, momentoName) {
 	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
 	myRef.update({[momentoName]: momentoName});
 }

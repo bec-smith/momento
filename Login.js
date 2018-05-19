@@ -24,8 +24,8 @@ class Login extends React.Component {
 
 
      this.state = {
-       email: '',
-       password: '',
+       email: 'test6@fakeTest.com',
+       password: 'password',
        momentos: '',
        emailEmpty: true,
        passwordEmpty: true,
@@ -84,13 +84,13 @@ render() {
 onLogin() {
   const { email, password, momentos } = this.state;
   //Alert.alert('Credentials', `email: ${email} + password: ${password}`);
-  if (!this.state.emailEmpty && !this.state.passwordEmpty) {
+  // if (!this.state.emailEmpty && !this.state.passwordEmpty) {
     this.signIn(email,password)
 
     Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
       this.props.navigation.navigate('Home');
     }.bind(this)))
-  }
+  // }
 
 
 }

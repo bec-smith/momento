@@ -184,26 +184,12 @@ class AddMoment extends React.Component {
   }
 
   addMoment() {
-    this.pushMomento(this.state.title,
+    pushMomento(this.state.title,
       this.state.description,
       this.state.imageUri,
       this.state.time,
       global.timelineName);
   }
-
-  pushMomento(title, description, imageURL, time, momentoName) {
-
-  	var myMomento = firebase.database().ref('/data/' + momentoName);
-  	myMomento.once('value').then(function(snapshot)
-  	{
-  		var numMomentos = snapshot.val();
-  		var numMomentos = numMomentos[Object.keys(numMomentos)[0]];
-  		myMomento.update({[numMomentos + 1]: {title: title, description: description, images: imageURL, time: time, id: (numMomentos+1)}});
-  		myMomento.update({0: numMomentos +1});
-  	})
-  }
-
-
 }
 
 
