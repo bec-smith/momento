@@ -15,6 +15,7 @@ class AddMoment extends React.Component {
     description: null,
     imageUrl: null,
     imageUri: null,
+    BGColor: 'white'
    };
 
   render() {
@@ -37,9 +38,10 @@ class AddMoment extends React.Component {
               handler: () => {
                 if (this.state.time != null) {
                   this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
+                    this.setState({BGColor: 'darkgray'})
                     this.addMoment();
-                    this.props.navigation.navigate('Home');
                   })
+
                 }
               },
             }}
@@ -48,8 +50,8 @@ class AddMoment extends React.Component {
               handler: () => {this.props.navigation.goBack();},
             }}
           />
-          <View style={styles.container}>
-            <TextInput
+        <View style={[styles.container, {backgroundColor: this.state.BGColor}]}>
+         <TextInput
               style={styles.smallInput}
               value={this.state.title}
               onChangeText={title => this.setState({title})}
@@ -184,12 +186,22 @@ class AddMoment extends React.Component {
   }
 
   addMoment() {
-    pushMomento(this.state.title,
-      this.state.description,
-      this.state.imageUri,
-      this.state.time,
-      global.timelineName);
+
+Promise.all(pushMomento(this.state.title,
+  this.state.description,
+  this.state.imageUri,
+  this.state.time,
+  global.timelineName)).then(function(snapshots){
+    setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
+
+  }.bind(this))
+
   }
+
+
+
+
+
 }
 
 
@@ -197,7 +209,6 @@ class AddMoment extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     padding: 20,
   },
   navbarContainer: {

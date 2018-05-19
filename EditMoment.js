@@ -209,23 +209,7 @@ class EditMoment extends React.Component {
   }
 
   editMoment() {
-    // curID = this.state.id;
-    // for (let i = 0; i < global.data.length; i++) {
-    //   if (curID === global.data[i].id) {
-    //     global.data.splice(i, 1);
-    //     break;
-    //   }
-    // }
-    // newMomentDate = Moment(this.state.time);
-    // for (let i = 0; i < global.data.length; i++) {
-    //   curMoment = global.data[i];
-    //   curDate = Moment(curMoment.time)
-    //   if (newMomentDate.isSameOrAfter(curDate)) {
-    //     global.data.splice(i, 0, this.state);
-    //     return;
-    //   }
-    // }
-    // global.data.push(this.state);
+
     deleteMomento(global.timelineName, this.state.id);
     pushMomento(this.state.title,
       this.state.description,

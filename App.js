@@ -18,7 +18,6 @@ import ViewTimelines from './ViewTimelines.js';
 
 console.disableYellowBox = true;
 
-
 global.data = [
   {
     id: 4,
@@ -124,7 +123,7 @@ class HomeScreen extends React.Component {
                <View style={styles.alignLeft}>
                  <TouchableHighlight onPress={() => {this.props.navigation.navigate('InviteUser');}}   >
                     <FontAwesome
-                      size={30}
+                      size={35}
                       name='user-plus'
                       color='#349DD8'
                     />
@@ -134,7 +133,7 @@ class HomeScreen extends React.Component {
                <View style={styles.buttons}>
                     <TouchableHighlight  onPress={() => {this.props.navigation.navigate('AddMoment');}}  >
                         <FontAwesome
-                          size={30}
+                          size={40}
                           name='plus-circle'
                           color='#349DD8'
                         />
