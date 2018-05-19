@@ -16,7 +16,7 @@ class EditMoment extends React.Component {
       title: params ? params.title : null,
       time: params ? params.time : null,
       description: params ? params.description : null,
-      imageUrl: params ? params.imageUrl : null,
+      imageUrl: params.imageUrl ? params.imageUrl : null,
     }
   }
 

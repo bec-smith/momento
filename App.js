@@ -72,7 +72,7 @@ class HomeScreen extends React.Component {
 
   render() {
     if (this.state.isLoading) {
-      return <View><Text style={styles.titleText}>Loading...</Text></View>;
+      return <View style={styles.loadContainer}><Text style={styles.loadText}>Loading...</Text></View>;
     }
     else {
       return (
@@ -210,7 +210,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  userText:{
+  loadText: {
+    fontFamily: 'Baskerville',
+    fontSize: 24,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  loadContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userText: {
     fontSize: 20,
     color: 'blue',
     alignItems: 'center',
