@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, StyleSheet, Text, TextInput, Image, View, Button, ScrollView } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, Image, View, Button, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { ImagePicker,Permissions } from 'expo';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
@@ -7,31 +7,32 @@ import Moment from 'moment';
 import { getTimelines } from './FirebaseHelper'
 
 class ViewTimelines extends React.Component {
-
+  _onPressButton(item)
+  {
+    global.timelineName = item
+    this.props.navigation.navigate('Home');
+  }
   render() {
-    //console.log(global.allTimelineNames)
-    console.log(global.timelineName)
+
     return (
       <View style={styles.container}>
         <Text style={styles.titleText}>Timelines You Have Access To</Text>
-        <ScrollView>
-
-
-{/*
-
-  // global.allTimelineNames  is an array of all the Timelines a user has access to
-  // make a clickable array so that when clicked, global.timelineName is set
-  // to whatever that thing is
-
-
-  */}
-
-        </ScrollView>
+          <View style={styles.container}>
+          <FlatList
+            data={global.allTimelineNames}
+            renderItem={
+              ({item}) =>
+               <TouchableOpacity onPress={() => this._onPressButton(item)} >
+               <View style={styles.button}>
+                <Text style={styles.item}>{item}</Text>
+                </View>
+              </TouchableOpacity>
+            }
+          />
+        </View>
       </View>
     );
   }
-
-
 }
 
 const styles = StyleSheet.create({
@@ -45,9 +46,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 5,
   },
+  button: {
+  marginBottom: 30,
+  width: 260,
+  alignItems: 'center',
+  backgroundColor: '#2196F3'
+},
+item: {
+  padding: 10,
+  margin: 20,
+  fontSize: 18,
+  height: 44,
+},
   titleText:{
     fontFamily: 'Baskerville',
     fontSize: 30,
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
