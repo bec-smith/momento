@@ -10,17 +10,12 @@ import * as firebase from 'firebase';
 export function pushMomento(title, description, imageURL, time, momentoName) {
 
 	var myMomento = firebase.database().ref('/data/' + momentoName);
-	console.log(title);
-	console.log(description);
-	console.log(imageURL);
-	console.log(time);
 	myMomento.once('value').then(function(snapshot)
 	{
 		var numMomentos = snapshot.val();
 		var numMomentos = numMomentos[Object.keys(numMomentos)[0]];
 		myMomento.update({[numMomentos + 1]: {title: title, description: description, images: imageURL, time: time, id: (numMomentos+1)}});
 		myMomento.update({0: numMomentos +1});
-		console.log('hello')
 	})
 }
 

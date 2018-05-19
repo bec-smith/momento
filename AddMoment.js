@@ -190,6 +190,7 @@ class AddMoment extends React.Component {
       this.state.time,
       global.timelineName);
   }
+
 }
 
 
