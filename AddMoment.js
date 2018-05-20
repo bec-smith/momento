@@ -5,18 +5,25 @@ import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 import * as firebase from 'firebase';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 import { pushMomento } from './FirebaseHelper.js'
 
 class AddMoment extends React.Component {
-  state = {
-    title: null,
-    time: Moment().startOf('day'),
-    description: null,
-    imageUrl: null,
-    imageUri: null,
-    BGColor: 'white'
-   };
+  constructor() {
+    super()
+    this.state = {
+      title: null,
+      time: Moment().startOf('day'),
+      description: null,
+      imageUrl: null,
+      imageUri: null,
+      BGColor: 'white'
+  };
+    global.analytics.hit(new ScreenHit('AddMoment'))
+     .then(() => console.log("success"))
+     .catch(e => console.log(e.message));
+  }
 
   render() {
     let { imageUri } = this.state;
@@ -186,19 +193,18 @@ class AddMoment extends React.Component {
   }
 
   addMoment() {
+    global.analytics.event(new Event('Moment', 'Add', this.state.title))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
+    Promise.all(pushMomento(this.state.title,
+      this.state.description,
+      this.state.imageUri,
+      this.state.time,
+      global.timelineName)).then(function(snapshots){
+        setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
 
-Promise.all(pushMomento(this.state.title,
-  this.state.description,
-  this.state.imageUri,
-  this.state.time,
-  global.timelineName)).then(function(snapshots){
-    setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
-
-  }.bind(this))
-
+      }.bind(this))
   }
-
-
 
 }
 

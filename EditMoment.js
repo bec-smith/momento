@@ -4,6 +4,7 @@ import { ImagePicker,Permissions } from 'expo';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 import { pushMomento, deleteMomento } from './FirebaseHelper'
 
@@ -18,6 +19,9 @@ class EditMoment extends React.Component {
       description: params ? params.description : null,
       imageUrl: params.imageUrl ? params.imageUrl : null,
     }
+    global.analytics.hit(new ScreenHit('EditMoment'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
   }
 
   render() {
@@ -209,19 +213,22 @@ class EditMoment extends React.Component {
   }
 
   editMoment() {
-
     deleteMomento(global.timelineName, this.state.id);
     pushMomento(this.state.title,
       this.state.description,
       this.state.imageUrl,
       this.state.time,
       global.timelineName);
+    global.analytics.event(new Event('Moment', 'Edit', this.state.title))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
   }
 
   deleteMoment() {
-  // console.log(global.timelineName)
-  // console.log(this.state.id)
     deleteMomento(global.timelineName, this.state.id);
+    global.analytics.event(new Event('Moment', 'Delete', this.state.title))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
     this.props.navigation.navigate('Home');
   }
 }

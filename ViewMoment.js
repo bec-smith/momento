@@ -2,8 +2,16 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, Image, View, Button } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import NavigationBar from 'react-native-navbar';
+import { Analytics, ScreenHit } from 'expo-analytics';
 
 class ViewMoment extends React.Component {
+
+  constructor() {
+    super()
+    global.analytics.hit(new ScreenHit('ViewMoment'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
+  }
 
   static navigationOptions = {
     header: null,

@@ -6,6 +6,7 @@ import Timeline from 'react-native-timeline-listview'
 import * as firebase from 'firebase';
 import NavigationBar from 'react-native-navbar';
 import Moment from 'moment';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
@@ -15,9 +16,9 @@ import CreateAccount from './CreateAccount.js';
 import InviteUser from './InviteUser.js';
 import ViewTimelines from './ViewTimelines.js';
 
-
 console.disableYellowBox = true;
 
+global.analytics = new Analytics('UA-119318283-1');
 global.data = [
   {
     id: 4,
@@ -36,6 +37,9 @@ class HomeScreen extends React.Component {
     this.state = {
       isLoading: true
     };
+    global.analytics.hit(new ScreenHit('Home'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
   }
 
   componentDidMount() {
@@ -53,8 +57,6 @@ class HomeScreen extends React.Component {
             return moment2.diff(moment1);
           }
         );
-        console.log("-------------------")
-        console.log(global.data);
       }
       else {
         global.data = [];
@@ -67,6 +69,9 @@ class HomeScreen extends React.Component {
 
   logout()
   {
+    global.analytics.event(new Event('Login', 'Logout'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
     firebase.auth().signOut();
     this.props.navigation.navigate('Login');
   }
