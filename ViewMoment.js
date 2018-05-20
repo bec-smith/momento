@@ -25,6 +25,7 @@ class ViewMoment extends React.Component {
     const time = params ? params.time : null;
     const description = params ? params.description : null;
     const imageUrl = params ? params.imageUrl : null;
+    console.log(params);
     return (
       <View style = {styles.navbarContainer}>
         <NavigationBar

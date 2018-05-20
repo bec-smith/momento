@@ -20,40 +20,51 @@ class InviteUser extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <Text style={styles.titleText}>Invite Your</Text>
-          <Text style={styles.titleText}>Significant Other</Text>
-          <Text style={styles.subtitleText}>(They will log in with this email and we'll make a joint timeline for the two of you)</Text>
+      <View style={styles.navbar}>
+        <NavigationBar
+          title = {{
+            title: 'Invite Partner',
+          }}
+          leftButton = {{
+            title: 'Cancel',
+            handler: () => {this.props.navigation.goBack();},
+          }}
+        />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+          <Text style={styles.titleText}>Invite Your</Text>
+            <Text style={styles.titleText}>Significant Other</Text>
+            <Text style={styles.subtitleText}>(They will create an account with this email and we'll make a joint timeline for the two of you!)</Text>
 
-          <TextInput
-            value={this.state.email}
-            keyboardType = 'email-address'
-            onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
-            placeholder='email'
-            placeholderTextColor = 'red'
-            style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
-          />
+            <TextInput
+              value={this.state.email}
+              keyboardType = 'email-address'
+              onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
+              placeholder='email'
+              placeholderTextColor = 'red'
+              style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
+            />
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.onInviteUser.bind(this)}
-         >
-           <Text style={styles.buttonText}>Invite</Text>
-         </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={this.onInviteUser.bind(this)}
+           >
+             <Text style={styles.buttonText}>Invite</Text>
+           </TouchableOpacity>
 
-         <View style={styles.buttons}>
-              <TouchableHighlight  onPress={() => {this.props.navigation.navigate('Home');}}  >
-                  <FontAwesome
-                    size={30}
-                    name='home'
-                    color='white'
-                  />
-             </TouchableHighlight>
+           <View style={styles.buttons}>
+                <TouchableHighlight  onPress={() => {this.props.navigation.navigate('Home');}}  >
+                    <FontAwesome
+                      size={30}
+                      name='home'
+                      color='white'
+                    />
+               </TouchableHighlight>
+          </View>
+
         </View>
-
+        </TouchableWithoutFeedback>
       </View>
-      </TouchableWithoutFeedback>
     );
   }
 
@@ -109,11 +120,16 @@ class InviteUser extends React.Component {
 
 
 const styles = StyleSheet.create({
+  navbar: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 5,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'salmon',
+    backgroundColor: 'white',
   },
   titleText:{
     fontFamily: 'Baskerville',
@@ -126,7 +142,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Baskerville',
     fontSize: 20,
     fontStyle: 'italic',
-    alignItems: 'center',
+    alignSelf: 'center',
     justifyContent: 'center',
   },
   buttons: {
@@ -157,7 +173,7 @@ const styles = StyleSheet.create({
     height: 44,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'black',
     marginVertical: 10,
   },
   invalidInput: {

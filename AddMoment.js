@@ -45,9 +45,13 @@ class AddMoment extends React.Component {
               handler: () => {
                 if (this.state.time != null) {
                   this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
-                    this.uploadImage(this.state.imageUri)
-                    this.setState({BGColor: 'darkgray'})
-                    this.addMoment();
+                    if (this.state.imageUri) {
+                      this.uploadImageAndPushMomento(this.state.imageUri)
+                      this.setState({BGColor: 'darkgray'})
+                    } else {
+                      this.setState({BGColor: 'darkgray'})
+                      this.addMoment();
+                    }
                   })
 
                 }
@@ -195,51 +199,53 @@ class AddMoment extends React.Component {
     global.analytics.event(new Event('Moment', 'Add', this.state.title))
       .then(() => console.log("success"))
       .catch(e => console.log(e.message));
-      Promise.all(pushMomento(this.state.title,
-        this.state.description,
-        this.state.imageUrl,
-        this.state.time,
-        global.timelineName)).then(function(snapshots){
-          setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
-        }.bind(this))
+    Promise.all(pushMomento(this.state.title,
+      this.state.description,
+      this.state.imageUrl,
+      this.state.time,
+      global.timelineName)).then(function(snapshots){
+        setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
+      }.bind(this))
     }
 
-    uploadImage = async (uri) => {
+  uploadImageAndPushMomento = async (uri) => {
 
-        console.log("uploadAsFile", uri)
-        const response = await fetch(uri);
-        const blob = await response.blob();
+      console.log("uploadAsFile", uri)
+      const response = await fetch(uri);
+      const blob = await response.blob();
 
-        var metadata = {
-          contentType: 'image/jpeg',
-        };
-        let name = new Date().getTime() + "-media.jpg"
-        const ref = firebase
-          .storage()
-          .ref()
-          .child('assets/' + name)
+      var metadata = {
+        contentType: 'image/jpeg',
+      };
+      let name = new Date().getTime() + "-media.jpg"
+      const ref = firebase
+        .storage()
+        .ref()
+        .child('assets/' + name)
 
-        return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
 
-            const task = ref.put(blob, metadata);
+          const task = ref.put(blob, metadata);
 
-            task.on('state_changed', function(snapshot){
-              // Observe state change events such as progress, pause, and resume
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log('Upload is ' + progress + '% done');
+          task.on('state_changed', function(snapshot){
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
 
-            }, function(error) {
-              // Handle unsuccessful uploads
-            }, function() {
-              // Handle successful uploads on complete
-              task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                console.log('File available at', downloadURL);
-                this.setState({ imageUrl: downloadURL });
-              }.bind(this));
+          }, function(error) {
+            // Handle unsuccessful uploads
+          }, function() {
+            // Handle successful uploads on complete
+            task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              console.log('File available at', downloadURL);
+              this.setState({ imageUrl: downloadURL }, function() {
+                this.addMoment();
+              });
             }.bind(this));
-        })
-      }
+          }.bind(this));
+      })
+    }
 }
 
 
