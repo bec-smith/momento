@@ -6,7 +6,7 @@ import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 import * as firebase from 'firebase';
 
-import { pushMomento } from './FirebaseHelper.js'
+import { pushMomento,uploadAsFile } from './FirebaseHelper.js'
 
 class AddMoment extends React.Component {
   state = {
@@ -170,7 +170,22 @@ class AddMoment extends React.Component {
     });
 
     if (!result.cancelled) {
-      this.setState({ imageUri: result.uri });
+
+
+      //let finalImage = await uploadAsFile(result.uri)
+      //console.log(finalImage)
+
+      Promise.all(uploadAsFile(result.uri).then(function(snapshots){
+        console.log(snapshots)
+        this.setState({ imageUri: result.uri });
+        var imageURL = snapshots;
+        this.setState({ imageUrl: imageURL });
+      }))
+
+      // Promise.all(uploadAsFile(result.uri).then(function(snapshots){
+      //     console.log(snapshots)
+      // }))
+
     //  uploadUrl = await uploadImageAsync(pickerResult.uri);
       //this.setState({ imageUrl: uploadUrl });
     }
@@ -189,7 +204,7 @@ class AddMoment extends React.Component {
 
 Promise.all(pushMomento(this.state.title,
   this.state.description,
-  this.state.imageUri,
+  this.state.imageUrl,
   this.state.time,
   global.timelineName)).then(function(snapshots){
     setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)

@@ -60,7 +60,7 @@ class CreateAccount extends React.Component {
   }
 
   onCreateAccount() {
-    console.log("create account");
+  //console.log("create account");
     if (this.state.email.length != 0 && this.state.password.length != 0) {
       //Check if user's email already exists in database, if not create it and navigate to InviteUser.
       //If so, change password to user's chosen password, navigate straight to 'Home'
