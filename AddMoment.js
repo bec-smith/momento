@@ -5,18 +5,25 @@ import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 import * as firebase from 'firebase';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 import { pushMomento } from './FirebaseHelper.js'
 
 class AddMoment extends React.Component {
-  state = {
-    title: null,
-    time: Moment().startOf('day'),
-    description: null,
-    imageUrl: null,
-    imageUri: null,
-    BGColor: 'white'
-   };
+  constructor() {
+    super()
+    this.state = {
+      title: null,
+      time: Moment().startOf('day'),
+      description: null,
+      imageUrl: null,
+      imageUri: null,
+      BGColor: 'white'
+  };
+    global.analytics.hit(new ScreenHit('AddMoment'))
+     .then(() => console.log("success"))
+     .catch(e => console.log(e.message));
+  }
 
   render() {
     let { imageUri } = this.state;
@@ -185,61 +192,58 @@ class AddMoment extends React.Component {
   }
 
   addMoment() {
+    global.analytics.event(new Event('Moment', 'Add', this.state.title))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
+    Promise.all(pushMomento(this.state.title,
+      this.state.description,
+      this.state.imageUrl,
+      this.state.time,
+      global.timelineName)).then(function(snapshots){
+        setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
 
-Promise.all(pushMomento(this.state.title,
-  this.state.description,
-  this.state.imageUrl,
-  this.state.time,
-  global.timelineName)).then(function(snapshots){
-    setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
+      }.bind(this))
 
-  }.bind(this))
+      }
 
+    uploadImage = async (uri) => {
+
+        console.log("uploadAsFile", uri)
+        const response = await fetch(uri);
+        const blob = await response.blob();
+
+        var metadata = {
+          contentType: 'image/jpeg',
+        };
+        let name = new Date().getTime() + "-media.jpg"
+        const ref = firebase
+          .storage()
+          .ref()
+          .child('assets/' + name)
+
+        return new Promise((resolve, reject) => {
+
+            const task = ref.put(blob, metadata);
+
+            task.on('state_changed', function(snapshot){
+              // Observe state change events such as progress, pause, and resume
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log('Upload is ' + progress + '% done');
+
+            }, function(error) {
+              // Handle unsuccessful uploads
+            }, function() {
+              // Handle successful uploads on complete
+              task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                console.log('File available at', downloadURL);
+                this.setState({ imageUrl: downloadURL });
+              }.bind(this));
+            }.bind(this));
+        })
+
+      }
   }
-
-uploadImage = async (uri) => {
-
-    console.log("uploadAsFile", uri)
-    const response = await fetch(uri);
-    const blob = await response.blob();
-
-    var metadata = {
-      contentType: 'image/jpeg',
-    };
-    let name = new Date().getTime() + "-media.jpg"
-    const ref = firebase
-      .storage()
-      .ref()
-      .child('assets/' + name)
-
-  	return new Promise((resolve, reject) => {
-
-  			const task = ref.put(blob, metadata);
-
-  			task.on('state_changed', function(snapshot){
-  			  // Observe state change events such as progress, pause, and resume
-  			  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-  			  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  			  console.log('Upload is ' + progress + '% done');
-
-  			}, function(error) {
-  			  // Handle unsuccessful uploads
-  			}, function() {
-  			  // Handle successful uploads on complete
-  			  task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-  			    console.log('File available at', downloadURL);
-            this.setState({ imageUrl: downloadURL });
-  			  }.bind(this));
-  			}.bind(this));
-  	})
-
-  }
-
-
-
-
-
-
 }
 
 

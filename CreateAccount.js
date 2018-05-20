@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as firebase from 'firebase';
-
+import NavigationBar from 'react-native-navbar';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 class CreateAccount extends React.Component {
 
@@ -13,6 +14,9 @@ class CreateAccount extends React.Component {
       emailEmpty: true,
       passwordEmpty: true,
     }
+    global.analytics.hit(new ScreenHit('CreateAccount'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
   }
 
   render() {
@@ -57,9 +61,14 @@ class CreateAccount extends React.Component {
   onCreateAccount() {
     console.log("create account");
     if (this.state.email.length != 0 && this.state.password.length != 0) {
+      global.analytics.event(new Event('Account', 'Create', this.state.email))
+        .then(() => console.log("success"))
+        .catch(e => console.log(e.message));
 
       this.createAccount(this.state.email, this.state.password)
       this.props.navigation.navigate('Home');
+      //Check if user's email already exists in database, if not create it and navigate to InviteUser.
+      //If so, change password to user's chosen password, navigate straight to 'Home'
     }
   }
 

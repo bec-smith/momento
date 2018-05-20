@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity,TouchableHighlight,
 import NavigationBar from 'react-native-navbar';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import * as firebase from 'firebase';
-
+import { Analytics, ScreenHit } from 'expo-analytics';
 
 class InviteUser extends React.Component {
   constructor() {
@@ -12,6 +12,9 @@ class InviteUser extends React.Component {
       email: "",
       emailEmpty: true,
     }
+    global.analytics.hit(new ScreenHit('InviteUser'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
   }
 
   render() {

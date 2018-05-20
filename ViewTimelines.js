@@ -3,10 +3,19 @@ import { Alert, StyleSheet, Text, TextInput, Image, View, Button, TouchableOpaci
 import { ImagePicker,Permissions } from 'expo';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
+import { Analytics, ScreenHit } from 'expo-analytics';
 
 import { getTimelines } from './FirebaseHelper'
 
 class ViewTimelines extends React.Component {
+
+  constructor() {
+    super()
+    global.analytics.hit(new ScreenHit('ViewTimelines'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
+  }
+
   _onPressButton(item)
   {
     global.timelineName = item

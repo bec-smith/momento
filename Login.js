@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Button, Text, TouchableOpacity, TextInput, View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as firebase from 'firebase';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 
 global.config = {
@@ -30,7 +31,9 @@ class Login extends React.Component {
        emailEmpty: true,
        passwordEmpty: true,
      };
-
+     global.analytics.hit(new ScreenHit('Login'))
+       .then(() => console.log("success"))
+       .catch(e => console.log(e.message));
    }
 
   static navigationOptions = {
@@ -85,6 +88,9 @@ onLogin() {
   const { email, password, momentos } = this.state;
 
     this.signIn(email,password)
+    global.analytics.event(new Event('Login', 'Login'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
 
     Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
       this.props.navigation.navigate('Home');
@@ -110,7 +116,6 @@ signIn(email, password){
 	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
 	return myRef.once('value').then(function(snapshot){
 		var peep = snapshot.val();
-		 //console.log(peep);
 	return this.getUserMomentos(peep)
 	}.bind(this))
 }
@@ -120,8 +125,6 @@ getUserMomentos(momentoName){
     global.allTimelineNames = Object.values(momentoName);
     singleMoment = momentoName[Object.keys(momentoName)[0]];
     global.timelineName = singleMoment;
-  //  console.log(global.allTimelineNames)
-
 }
 
 
