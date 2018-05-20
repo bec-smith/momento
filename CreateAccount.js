@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'salmon',
+    backgroundColor: 'white',
   },
   titleText:{
     fontFamily: 'Baskerville',
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     height: 44,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'black',
     marginVertical: 10,
   },
   invalidInput: {

@@ -85,7 +85,7 @@ class HomeScreen extends React.Component {
         <View style={styles.navbar}>
           <NavigationBar
             rightButton = {{
-              title: 'View Timelines',
+              title: 'Change Timelines',
               handler: () => {
                 this.props.navigation.navigate('ViewTimelines');
               },

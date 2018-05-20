@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Alert, StyleSheet, Text, TextInput, Image, View, Button, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { ImagePicker,Permissions } from 'expo';
 import Calendar from 'react-native-calendar-datepicker';
+import NavigationBar from 'react-native-navbar';
 import Moment from 'moment';
 import { Analytics, ScreenHit } from 'expo-analytics';
 
@@ -24,20 +25,33 @@ class ViewTimelines extends React.Component {
   render() {
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.titleText}>Timelines You Have Access To</Text>
-          <View style={styles.container}>
-          <FlatList
-            data={global.allTimelineNames}
-            renderItem={
-              ({item}) =>
-               <TouchableOpacity onPress={() => this._onPressButton(item)} >
-               <View style={styles.button}>
-                <Text style={styles.item}>{item}</Text>
-                </View>
-              </TouchableOpacity>
-            }
-          />
+      <View style={styles.navbarContainer}>
+        <NavigationBar
+          title = {{
+            title: 'Change Timeline',
+          }}
+          leftButton = {{
+            title: 'Cancel',
+            handler: () => {
+              this.props.navigation.goBack();
+            },
+          }}
+        />
+        <View style={styles.container}>
+          <Text style={styles.titleText}>Accessable Timelines</Text>
+            <View style={styles.container}>
+            <FlatList
+              data={global.allTimelineNames}
+              renderItem={
+                ({item}) =>
+                 <TouchableOpacity onPress={() => this._onPressButton(item)} >
+                 <View style={styles.button}>
+                  <Text style={styles.item}>{item}</Text>
+                  </View>
+                </TouchableOpacity>
+              }
+            />
+          </View>
         </View>
       </View>
     );
@@ -56,17 +70,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   button: {
-  marginBottom: 30,
-  width: 260,
-  alignItems: 'center',
-  backgroundColor: '#2196F3'
-},
-item: {
-  padding: 10,
-  margin: 20,
-  fontSize: 18,
-  height: 44,
-},
+    marginBottom: 30,
+    width: 260,
+    alignItems: 'center',
+    backgroundColor: '#2196F3'
+  },
+  item: {
+    padding: 10,
+    margin: 20,
+    fontSize: 18,
+    height: 44,
+    color: 'white',
+  },
   titleText:{
     fontFamily: 'Baskerville',
     fontSize: 30,
