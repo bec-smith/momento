@@ -125,7 +125,6 @@ getUserMomentos(momentoName){
     global.allTimelineNames = Object.values(momentoName);
     singleMoment = momentoName[Object.keys(momentoName)[0]];
     global.timelineName = singleMoment;
-
 }
 
 

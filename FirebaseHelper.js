@@ -10,7 +10,7 @@ import * as firebase from 'firebase';
 export function pushMomento(title, description, imageURL, time, momentoName) {
 
 	var myMomento = firebase.database().ref('/data/' + momentoName);
-	
+
 	return myMomento.once('value').then(function(snapshot)
 
 	{
@@ -61,4 +61,44 @@ export function inviteUserToMomento(userName, momentoName) {
 			preAddUSer(userName, momentoName);
 		}
 	})
+}
+
+
+
+export const uploadAsFile = async (uri) => {
+
+  console.log("uploadAsFile", uri)
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  var metadata = {
+    contentType: 'image/jpeg',
+  };
+  let name = new Date().getTime() + "-media.jpg"
+  const ref = firebase
+    .storage()
+    .ref()
+    .child('assets/' + name)
+
+	return new Promise((resolve, reject) => {
+
+			const task = ref.put(blob, metadata);
+
+			task.on('state_changed', function(snapshot){
+			  // Observe state change events such as progress, pause, and resume
+			  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+			  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+			  console.log('Upload is ' + progress + '% done');
+
+			}, function(error) {
+			  // Handle unsuccessful uploads
+			}, function() {
+			  // Handle successful uploads on complete
+			  task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+			    console.log('File available at', downloadURL);
+					return downloadURL
+			  });
+			});
+	})
+
 }
