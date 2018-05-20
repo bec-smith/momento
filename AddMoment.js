@@ -195,16 +195,6 @@ class AddMoment extends React.Component {
     global.analytics.event(new Event('Moment', 'Add', this.state.title))
       .then(() => console.log("success"))
       .catch(e => console.log(e.message));
-    Promise.all(pushMomento(this.state.title,
-      this.state.description,
-      this.state.imageUrl,
-      this.state.time,
-      global.timelineName)).then(function(snapshots){
-        setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
-
-      }.bind(this))
-
-      }
 
     uploadImage = async (uri) => {
 
@@ -241,9 +231,15 @@ class AddMoment extends React.Component {
               }.bind(this));
             }.bind(this));
         })
-
       }
-  }
+      Promise.all(pushMomento(this.state.title,
+        this.state.description,
+        this.state.imageUrl,
+        this.state.time,
+        global.timelineName)).then(function(snapshots){
+          setTimeout(() => {this.props.navigation.navigate('Home')}, 1000)
+        }.bind(this))
+    }
 }
 
 
