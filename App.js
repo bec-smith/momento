@@ -6,7 +6,7 @@ import Timeline from 'react-native-timeline-listview'
 import * as firebase from 'firebase';
 import NavigationBar from 'react-native-navbar';
 import Moment from 'moment';
-import { Analytics, ScreenHit } from 'expo-analytics';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
@@ -69,6 +69,9 @@ class HomeScreen extends React.Component {
 
   logout()
   {
+    global.analytics.event(new Event('Login', 'Logout'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
     firebase.auth().signOut();
     this.props.navigation.navigate('Login');
   }

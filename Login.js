@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Button, Text, TouchableOpacity, TextInput, View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as firebase from 'firebase';
-import { Analytics, ScreenHit } from 'expo-analytics';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 
 global.config = {
@@ -88,6 +88,9 @@ onLogin() {
   const { email, password, momentos } = this.state;
 
     this.signIn(email,password)
+    global.analytics.event(new Event('Login', 'Login'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
 
     Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
       this.props.navigation.navigate('Home');

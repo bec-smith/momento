@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import NavigationBar from 'react-native-navbar';
-import { Analytics, ScreenHit } from 'expo-analytics';
+import { Analytics, ScreenHit, Event } from 'expo-analytics';
 
 class CreateAccount extends React.Component {
 
@@ -68,6 +68,9 @@ class CreateAccount extends React.Component {
     if (this.state.email.length != 0 && this.state.password.length != 0) {
       //Check if user's email already exists in database, if not create it and navigate to InviteUser.
       //If so, change password to user's chosen password, navigate straight to 'Home'
+      global.analytics.event(new Event('Account', 'Create', this.state.email))
+        .then(() => console.log("success"))
+        .catch(e => console.log(e.message));
       this.props.navigation.navigate('InviteUser');
     }
   }
