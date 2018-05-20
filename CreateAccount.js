@@ -22,39 +22,47 @@ class CreateAccount extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
+      <View style={styles.navbar}>
+        <NavigationBar
+          leftButton = {{
+            title: 'Cancel',
+            handler: () => {this.props.navigation.goBack();},
+          }}
+        />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
 
-        <Text style={styles.titleText}>Welcome To</Text>
-          <Text style={styles.titleText}>Momento</Text>
+          <Text style={styles.titleText}>Welcome To</Text>
+            <Text style={styles.titleText}>Momento</Text>
 
-          <TextInput
-            value={this.state.email}
-            keyboardType = 'email-address'
-            onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
-            placeholder='email'
-            placeholderTextColor = 'red'
-            style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
-          />
+            <TextInput
+              value={this.state.email}
+              keyboardType = 'email-address'
+              onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
+              placeholder='email'
+              placeholderTextColor = 'red'
+              style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
+            />
 
-          <TextInput
-            value={this.state.password}
-            onChangeText={(password) => this.setState({ password: password, passwordEmpty: password.length == 0 })}
-            placeholder={'password'}
-            secureTextEntry={true}
-            placeholderTextColor = 'red'
-            style={[this.state.passwordEmpty ? styles.invalidInput : styles.validInput]}
-          />
+            <TextInput
+              value={this.state.password}
+              onChangeText={(password) => this.setState({ password: password, passwordEmpty: password.length == 0 })}
+              placeholder={'password'}
+              secureTextEntry={true}
+              placeholderTextColor = 'red'
+              style={[this.state.passwordEmpty ? styles.invalidInput : styles.validInput]}
+            />
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.onCreateAccount.bind(this)}
-         >
-           <Text style={styles.buttonText}>Create Account</Text>
-         </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={this.onCreateAccount.bind(this)}
+           >
+             <Text style={styles.buttonText}>Create Account</Text>
+           </TouchableOpacity>
 
+        </View>
+        </TouchableWithoutFeedback>
       </View>
-      </TouchableWithoutFeedback>
     );
   }
 
@@ -122,6 +130,11 @@ class CreateAccount extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  navbar: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 5,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

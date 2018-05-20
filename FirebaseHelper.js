@@ -16,7 +16,7 @@ export function pushMomento(title, description, imageURL, time, momentoName) {
 	{
 		var numMomentos = snapshot.val();
 		var numMomentos = numMomentos[Object.keys(numMomentos)[0]];
-		myMomento.update({[numMomentos + 1]: {title: title, description: description, images: imageURL, time: time, id: (numMomentos+1)}});
+		myMomento.update({[numMomentos + 1]: {title: title, description: description, imageUrl: imageURL, time: time, id: (numMomentos+1)}});
 		myMomento.update({0: numMomentos +1});
 		return true;
 	})

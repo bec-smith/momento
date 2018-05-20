@@ -5,6 +5,7 @@ import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 import { Analytics, ScreenHit, Event } from 'expo-analytics';
+import * as firebase from 'firebase';
 
 import { pushMomento, deleteMomento } from './FirebaseHelper'
 
@@ -18,6 +19,8 @@ class EditMoment extends React.Component {
       time: params ? params.time : null,
       description: params ? params.description : null,
       imageUrl: params.imageUrl ? params.imageUrl : null,
+      imageUri: null,
+      BGColor: 'white',
     }
     global.analytics.hit(new ScreenHit('EditMoment'))
       .then(() => console.log("success"))
@@ -31,6 +34,8 @@ class EditMoment extends React.Component {
     const BLACK = '#424242';
     const LIGHT_GREY = '#F5F5F5';
 
+    let imageSource = this.state.imageUri ? this.state.imageUri : this.state.imageUrl
+
     return (
       <View style={styles.navbarContainer}>
         <ScrollView>
@@ -43,24 +48,10 @@ class EditMoment extends React.Component {
               handler: () => {
                 if (typeof this.state.time === 'string') {
                   this.editMoment();
-                  this.props.navigation.navigate('ViewMoment', {
-                    id: this.state.id,
-                    title: this.state.title,
-                    time: this.state.time,
-                    description: this.state.description,
-                    imageUrl: this.state.imageUrl,
-                  });
                 }
                 else if (this.state.time != null) {
                   this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
                     this.editMoment();
-                    this.props.navigation.navigate('ViewMoment', {
-                      id: this.state.id,
-                      title: this.state.title,
-                      time: this.state.time,
-                      description: this.state.description,
-                      imageUrl: this.state.imageUrl,
-                    });
                   })
                 }
               },
@@ -70,7 +61,7 @@ class EditMoment extends React.Component {
               handler: () => {this.props.navigation.goBack();},
             }}
           />
-          <View style={styles.container}>
+          <View style={[styles.container, {backgroundColor: this.state.BGColor}]}>
             <TextInput
               style={styles.smallInput}
               value={this.state.title}
@@ -185,7 +176,7 @@ class EditMoment extends React.Component {
                 onPress={this.pickFromGallery}
               />
             </View>
-            {this.state.imageUrl && <Image source={{ uri: this.state.imageUrl }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
+            {imageSource && <Image source={{ uri: imageSource }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
           </View>
         </ScrollView>
       </View>
@@ -198,8 +189,7 @@ class EditMoment extends React.Component {
     });
 
     if (!result.cancelled) {
-      // console.log(result) returns only height, width, type, cancelled(t/f), and uri available
-      this.setState({ imageUrl: result.uri });
+      this.setState({ imageUri: result.uri });
     }
   };
 
@@ -213,15 +203,27 @@ class EditMoment extends React.Component {
   }
 
   editMoment() {
-    deleteMomento(global.timelineName, this.state.id);
-    pushMomento(this.state.title,
-      this.state.description,
-      this.state.imageUrl,
-      this.state.time,
-      global.timelineName);
     global.analytics.event(new Event('Moment', 'Edit', this.state.title))
       .then(() => console.log("success"))
       .catch(e => console.log(e.message));
+    deleteMomento(global.timelineName, this.state.id);
+    if (this.state.imageUri) {
+      this.setState({BGColor: 'darkgray'})
+      this.uploadImageAndPushMomento(this.state.imageUri);
+    } else {
+      pushMomento(this.state.title,
+        this.state.description,
+        this.state.imageUrl,
+        this.state.time,
+        global.timelineName);
+      this.props.navigation.navigate('ViewMoment', {
+        id: this.state.id,
+        title: this.state.title,
+        time: this.state.time,
+        description: this.state.description,
+        imageUrl: this.state.imageUrl,
+      });
+    }
   }
 
   deleteMoment() {
@@ -231,6 +233,56 @@ class EditMoment extends React.Component {
       .catch(e => console.log(e.message));
     this.props.navigation.navigate('Home');
   }
+
+  uploadImageAndPushMomento = async (uri) => {
+
+      console.log("uploadAsFile", uri)
+      const response = await fetch(uri);
+      const blob = await response.blob();
+
+      var metadata = {
+        contentType: 'image/jpeg',
+      };
+      let name = new Date().getTime() + "-media.jpg"
+      const ref = firebase
+        .storage()
+        .ref()
+        .child('assets/' + name)
+
+      return new Promise((resolve, reject) => {
+
+          const task = ref.put(blob, metadata);
+
+          task.on('state_changed', function(snapshot){
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+
+          }, function(error) {
+            // Handle unsuccessful uploads
+          }, function() {
+            // Handle successful uploads on complete
+            task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              console.log('File available at', downloadURL);
+              this.setState({ imageUrl: downloadURL }, function() {
+                pushMomento(this.state.title,
+                  this.state.description,
+                  this.state.imageUrl,
+                  this.state.time,
+                  global.timelineName);
+                this.props.navigation.navigate('ViewMoment', {
+                  id: this.state.id,
+                  title: this.state.title,
+                  time: this.state.time,
+                  description: this.state.description,
+                  imageUrl: this.state.imageUrl,
+                });
+              });
+            }.bind(this));
+          }.bind(this));
+      })
+    }
 }
 
 const styles = StyleSheet.create({

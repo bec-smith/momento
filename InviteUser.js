@@ -34,7 +34,7 @@ class InviteUser extends React.Component {
         <View style={styles.container}>
           <Text style={styles.titleText}>Invite Your</Text>
             <Text style={styles.titleText}>Significant Other</Text>
-            <Text style={styles.subtitleText}>(They will log in with this email and we'll make a joint timeline for the two of you)</Text>
+            <Text style={styles.subtitleText}>(They will create an account with this email and we'll make a joint timeline for the two of you!)</Text>
 
             <TextInput
               value={this.state.email}
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Baskerville',
     fontSize: 20,
     fontStyle: 'italic',
-    alignItems: 'center',
+    alignSelf: 'center',
     justifyContent: 'center',
   },
   buttons: {
