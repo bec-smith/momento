@@ -196,6 +196,9 @@ class EditMoment extends React.Component {
   pickFromGallery = async () => {
     const permissions = Permissions.CAMERA_ROLL;
     const { status } = await Permissions.askAsync(permissions);
+    global.analytics.event(new Event('Image', 'Edit'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
 
     if(status === 'granted') {
       this._pickImage()
