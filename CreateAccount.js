@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import NavigationBar from 'react-native-navbar';
+import { Analytics, ScreenHit } from 'expo-analytics';
 
 class CreateAccount extends React.Component {
 
@@ -12,6 +13,9 @@ class CreateAccount extends React.Component {
       emailEmpty: true,
       passwordEmpty: true,
     }
+    global.analytics.hit(new ScreenHit('CreateAccount'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
   }
 
   render() {

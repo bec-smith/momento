@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import NavigationBar from 'react-native-navbar';
+import { Analytics, ScreenHit } from 'expo-analytics';
 
 class InviteUser extends React.Component {
   constructor() {
@@ -9,6 +10,9 @@ class InviteUser extends React.Component {
       email: "",
       emailEmpty: true,
     }
+    global.analytics.hit(new ScreenHit('InviteUser'))
+      .then(() => console.log("success"))
+      .catch(e => console.log(e.message));
   }
 
   render() {
