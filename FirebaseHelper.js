@@ -74,8 +74,7 @@ export const uploadAsFile = async (uri) => {
   var metadata = {
     contentType: 'image/jpeg',
   };
-
-  let name = uri + "-media.jpg"
+  let name = new Date().getTime() + "-media.jpg"
   const ref = firebase
     .storage()
     .ref()
