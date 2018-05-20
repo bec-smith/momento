@@ -6,7 +6,7 @@ import Moment from 'moment';
 import NavigationBar from 'react-native-navbar';
 import * as firebase from 'firebase';
 
-import { pushMomento,uploadAsFile } from './FirebaseHelper.js'
+import { pushMomento } from './FirebaseHelper.js'
 
 class AddMoment extends React.Component {
   state = {
@@ -38,6 +38,7 @@ class AddMoment extends React.Component {
               handler: () => {
                 if (this.state.time != null) {
                   this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
+                    this.uploadImage(this.state.imageUri)
                     this.setState({BGColor: 'darkgray'})
                     this.addMoment();
                   })
@@ -170,24 +171,7 @@ class AddMoment extends React.Component {
     });
 
     if (!result.cancelled) {
-
-
-      //let finalImage = await uploadAsFile(result.uri)
-      //console.log(finalImage)
-
-      Promise.all(uploadAsFile(result.uri).then(function(snapshots){
-        console.log(snapshots)
-        this.setState({ imageUri: result.uri });
-        var imageURL = snapshots;
-        this.setState({ imageUrl: imageURL });
-      }))
-
-      // Promise.all(uploadAsFile(result.uri).then(function(snapshots){
-      //     console.log(snapshots)
-      // }))
-
-    //  uploadUrl = await uploadImageAsync(pickerResult.uri);
-      //this.setState({ imageUrl: uploadUrl });
+      this.setState({ imageUri: result.uri });
     }
   };
 
@@ -212,6 +196,47 @@ Promise.all(pushMomento(this.state.title,
   }.bind(this))
 
   }
+
+uploadImage = async (uri) => {
+
+    console.log("uploadAsFile", uri)
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    var metadata = {
+      contentType: 'image/jpeg',
+    };
+    let name = new Date().getTime() + "-media.jpg"
+    const ref = firebase
+      .storage()
+      .ref()
+      .child('assets/' + name)
+
+  	return new Promise((resolve, reject) => {
+
+  			const task = ref.put(blob, metadata);
+
+  			task.on('state_changed', function(snapshot){
+  			  // Observe state change events such as progress, pause, and resume
+  			  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+  			  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  			  console.log('Upload is ' + progress + '% done');
+
+  			}, function(error) {
+  			  // Handle unsuccessful uploads
+  			}, function() {
+  			  // Handle successful uploads on complete
+  			  task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+  			    console.log('File available at', downloadURL);
+            this.setState({ imageUrl: downloadURL });
+  			  }.bind(this));
+  			}.bind(this));
+  	})
+
+  }
+
+
+
 
 
 
