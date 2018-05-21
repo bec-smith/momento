@@ -111,8 +111,9 @@ class CreateAccount extends React.Component {
 
 
   addUser(userName, color){
-	var myRef = firebase.database().ref('/users');
-	myRef.update({[userName]: {color: color, momentos: {defaultMomento: userName}}});
+    var myRef = firebase.database().ref('/users');
+    defaultUserName = "default" + userName;
+	  myRef.update({[userName]: {color: color, momentos: {defaultMomento: defaultUserName}}});
 }
 
  createMomento(momentoName){
