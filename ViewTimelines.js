@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   navbarContainer: {
     flex: 1,
     backgroundColor: 'white',
-    paddingHorizontal: 5,
+    paddingHorizontal: 12,
   },
   button: {
     marginBottom: 30,
