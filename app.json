@@ -6,7 +6,7 @@
     "slug": "momento",
     "sdkVersion": "26.0.0",
     "ios": {
-      "bundleIdentifier": "edu.stanford.cs377u.momento"
+      "bundleIdentifier": "edu.stanford.cs377u.momento2"
     },
     "privacy": "public",
   }
