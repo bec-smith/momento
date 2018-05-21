@@ -81,59 +81,55 @@ render() {
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
-  );
-}
+    );
+  }
 
-onLogin() {
-  const { email, password, momentos } = this.state;
+  onLogin() {
+    const { email, password, momentos } = this.state;
 
-    this.signIn(email,password)
-    global.analytics.event(new Event('Login', 'Login'))
-      .then(() => console.log("success"))
-      .catch(e => console.log(e.message));
+      this.signIn(email, password)
+      global.analytics.event(new Event('Login', 'Login'))
+        .then(() => console.log("success"))
+        .catch(e => console.log(e.message));
 
-    Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
-      this.props.navigation.navigate('Home');
-    }.bind(this)))
+      Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
+        this.props.navigation.navigate('Home');
+      }.bind(this)))
+  }
 
-
-
-}
-
-onSignUp() {
+  onSignUp() {
     this.props.navigation.navigate('CreateAccount');
-}
+  }
 
-signIn(email, password){
-	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  signIn(email, password) {
+  	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
   		var errorCode = error.code;
   		var errorMessage = error.message;
   	});
+  }
 
-}
-
- getMomentoName(userName){
-	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
-	return myRef.once('value').then(function(snapshot){
-		var peep = snapshot.val();
-	return this.getUserMomentos(peep)
-	}.bind(this))
-}
-
-
-getUserMomentos(momentoName){
-    global.allTimelineNames = Object.values(momentoName);
-    singleMoment = momentoName[Object.keys(momentoName)[0]];
-    global.timelineName = singleMoment;
-}
+   getMomentoName(userName){
+  	var myRef = firebase.database().ref('/users/' + userName +'/momentos');
+  	return myRef.once('value').then(function(snapshot){
+  		var peep = snapshot.val();
+  	return this.getUserMomentos(peep)
+  	}.bind(this))
+  }
 
 
-emailToHeader(email){
- return email.replace(".","*-*");
-}
-headerToEmail(header){
- return header.replace("*-*",".");
-}
+  getUserMomentos(momentoName){
+      global.allTimelineNames = Object.values(momentoName);
+      singleMoment = momentoName[Object.keys(momentoName)[0]];
+      global.timelineName = singleMoment;
+  }
+
+
+  emailToHeader(email){
+   return email.replace(".","*-*");
+  }
+  headerToEmail(header){
+   return header.replace("*-*",".");
+  }
 
 
 }

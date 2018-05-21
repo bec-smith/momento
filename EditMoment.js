@@ -72,6 +72,16 @@ class EditMoment extends React.Component {
               returnKeyType="next"
               blurOnSubmit={true}
             />
+            <TextInput
+              style={styles.largeInput}
+              value={this.state.description}
+              onChangeText={description => this.setState({description})}
+              placeholder="Description"
+              multiline = {true}
+              numberOfLines = {4}
+              returnKeyType="done"
+              blurOnSubmit={true}
+            />
             <Calendar
               onChange={(time) =>
               {
@@ -150,17 +160,6 @@ class EditMoment extends React.Component {
                yearText={{
                  color: BLACK,
                }}
-            />
-            <TextInput
-              style={styles.largeInput}
-              value={this.state.description}
-              onChangeText={description => this.setState({description})}
-              placeholder="Description"
-              multiline = {true}
-              numberOfLines = {4}
-              returnKeyType="done"
-              blurOnSubmit={true}
-
             />
             <View>
               <Button

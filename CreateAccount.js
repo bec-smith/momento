@@ -74,7 +74,6 @@ class CreateAccount extends React.Component {
         .catch(e => console.log(e.message));
 
       this.createAccount(this.state.email, this.state.password)
-      this.props.navigation.navigate('Home');
       //Check if user's email already exists in database, if not create it and navigate to InviteUser.
       //If so, change password to user's chosen password, navigate straight to 'Home'
     }
@@ -96,30 +95,54 @@ class CreateAccount extends React.Component {
 	{
 		var data = snapshot.val();
 		console.log(data);
-		if(data[this.emailToHeader(email)] !== undefined){
+		if(data[this.emailToHeader(email)] !== undefined) {
 
 		}
 		//If the user does not exist, create them on the DataBase!
-		else{
+		else {
   			this.addUser(this.emailToHeader(email), "blue");
   			//Create them a default momento
   			this.createMomento("default" + this.emailToHeader(email));
 		}
+    this.signIn(email, password);
+    Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots) {
+      this.props.navigation.navigate('Home');
+    }.bind(this)))
 	}.bind(this))
 
 };
 
-
-  addUser(userName, color){
+  addUser(userName, color) {
     var myRef = firebase.database().ref('/users');
     defaultUserName = "default" + userName;
 	  myRef.update({[userName]: {color: color, momentos: {defaultMomento: defaultUserName}}});
-}
+  }
 
- createMomento(momentoName){
-	var myRef = firebase.database().ref('/data');
-	myRef.update({[momentoName]: {0: 0}});
-}
+  createMomento(momentoName) {
+    var myRef = firebase.database().ref('/data');
+    myRef.update({[momentoName]: {0: 0}});
+  }
+
+  signIn(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    });
+  }
+
+  getMomentoName(userName) {
+    var myRef = firebase.database().ref('/users/' + userName +'/momentos');
+    return myRef.once('value').then(function(snapshot){
+     var peep = snapshot.val();
+    return this.getUserMomentos(peep)
+    }.bind(this))
+  }
+
+  getUserMomentos(momentoName) {
+     global.allTimelineNames = Object.values(momentoName);
+     singleMoment = momentoName[Object.keys(momentoName)[0]];
+     global.timelineName = singleMoment;
+   }
 
   emailToHeader(email) {
    return email.replace(".","*-*");
