@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
   navbar: {
     flex: 1,
     backgroundColor: 'white',
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
+    paddingTop: 28,
   },
   container: {
     flex: 1,

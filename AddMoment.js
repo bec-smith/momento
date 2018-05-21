@@ -261,7 +261,8 @@ const styles = StyleSheet.create({
   navbarContainer: {
     flex: 1,
     backgroundColor: 'white',
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
+    paddingTop: 28,
   },
   smallInput: {
     marginVertical: 20,
