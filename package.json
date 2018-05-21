@@ -1,7 +1,7 @@
 {
   "name": "Momento",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "jest-expo": "26.0.0",
     "react-native-scripts": "1.13.2",

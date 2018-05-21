@@ -25,8 +25,8 @@ class Login extends React.Component {
 
 
      this.state = {
-       email: 'chris@test.com',
-       password: 'password',
+       email: '',
+       password: '',
        momentos: '',
        emailEmpty: true,
        passwordEmpty: true,

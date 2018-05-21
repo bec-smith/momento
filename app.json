@@ -1,5 +1,13 @@
 {
   "expo": {
-    "sdkVersion": "26.0.0"
+    "name": "Momento",
+    "icon": "./img/icon.png",
+    "version": "1.0.0",
+    "slug": "momento",
+    "sdkVersion": "26.0.0",
+    "ios": {
+      "bundleIdentifier": "edu.stanford.cs377u"
+    },
+    "privacy": "public",
   }
 }
