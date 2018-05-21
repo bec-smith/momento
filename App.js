@@ -209,7 +209,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 20,
-    paddingTop: 25,
   },
   titleText:{
     fontFamily: 'Baskerville',
