@@ -2,7 +2,7 @@
   "expo": {
     "name": "Momento",
     "icon": "./img/icon.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "slug": "momento",
     "sdkVersion": "26.0.0",
     "ios": {
