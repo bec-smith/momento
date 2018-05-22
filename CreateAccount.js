@@ -34,7 +34,7 @@ class CreateAccount extends React.Component {
 
           <Text style={styles.titleText}>Welcome To</Text>
             <Text style={styles.titleText}>Momento</Text>
-
+            <Text>Password needs to be at least 6 characters</Text>
             <TextInput
               value={this.state.email}
               keyboardType = 'email-address'
@@ -52,7 +52,6 @@ class CreateAccount extends React.Component {
               placeholderTextColor = 'red'
               style={[this.state.passwordEmpty ? styles.invalidInput : styles.validInput]}
             />
-
             <TouchableOpacity
               style={styles.button}
               onPress={this.onCreateAccount.bind(this)}
@@ -67,7 +66,6 @@ class CreateAccount extends React.Component {
   }
 
   onCreateAccount() {
-    console.log("create account");
     if (this.state.email.length != 0 && this.state.password.length != 0) {
       global.analytics.event(new Event('Account', 'Create', this.state.email))
         .then(() => console.log("success"))
@@ -81,35 +79,32 @@ class CreateAccount extends React.Component {
 
   //Create User Accounts
  createAccount(email, password){
-	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+	firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
+    var myRef = firebase.database().ref('/users/');
+    myRef.once('value').then(function(snapshot)
+    {
+      var data = snapshot.val();
+      if(data[this.emailToHeader(email)] !== undefined) {
+
+      }
+      //If the user does not exist, create them on the DataBase!
+      else {
+          this.addUser(this.emailToHeader(email), "blue");
+          //Create them a default momento
+          this.createMomento("default" + this.emailToHeader(email));
+      }
+      this.signIn(email, password);
+      Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots) {
+        this.props.navigation.navigate('Home');
+      }.bind(this)))
+    }.bind(this))
+  }.bind(this),
+  function(error) {
   		// Handle Errors here.
   		var errorCode = error.code;
   		var errorMessage = error.message;
   		console.log(errorCode);
-  		//console.log("SUBMITTED");
-  	})
-	//if the userName already exists in the DataBase
-
-	var myRef = firebase.database().ref('/users/');
-	myRef.once('value').then(function(snapshot)
-	{
-		var data = snapshot.val();
-		console.log(data);
-		if(data[this.emailToHeader(email)] !== undefined) {
-
-		}
-		//If the user does not exist, create them on the DataBase!
-		else {
-  			this.addUser(this.emailToHeader(email), "blue");
-  			//Create them a default momento
-  			this.createMomento("default" + this.emailToHeader(email));
-		}
-    this.signIn(email, password);
-    Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots) {
-      this.props.navigation.navigate('Home');
-    }.bind(this)))
-	}.bind(this))
-
+	});
 };
 
   addUser(userName, color) {

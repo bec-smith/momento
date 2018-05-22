@@ -86,15 +86,7 @@ render() {
 
   onLogin() {
     const { email, password, momentos } = this.state;
-
-      this.signIn(email, password)
-      global.analytics.event(new Event('Login', 'Login'))
-        .then(() => console.log("success"))
-        .catch(e => console.log(e.message));
-
-      Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
-        this.props.navigation.navigate('Home');
-      }.bind(this)))
+    this.signIn(email, password);
   }
 
   onSignUp() {
@@ -102,7 +94,17 @@ render() {
   }
 
   signIn(email, password) {
-  	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  	firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+      console.log(user);
+      console.log(user.user.email);
+      global.analytics.event(new Event('Login', 'Login'))
+        .then(() => console.log("success"))
+        .catch(e => console.log(e.message));
+      Promise.all(this.getMomentoName(this.emailToHeader(email)).then(function(snapshots){
+        this.props.navigation.navigate('Home');
+      }.bind(this)))
+    }.bind(this),
+    function(error) {
   		var errorCode = error.code;
   		var errorMessage = error.message;
   	});
