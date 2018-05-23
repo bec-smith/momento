@@ -174,21 +174,20 @@ const RootStack = StackNavigator(
       screen: EditMoment,
     },
     CreateAccount: {
-   screen: CreateAccount,
+      screen: CreateAccount,
     },
-      InviteUser: {
-     screen: InviteUser,
-   },
+    InviteUser: {
+      screen: InviteUser,
+    },
    ViewTimelines: {
-  screen: ViewTimelines,
-},
+     screen: ViewTimelines,
+   },
 
-  },
-  {
+ },
+ {
     initialRouteName: 'Login',
     headerMode: 'none',
     mode: 'modal', //makes screen slide up
-
   }
 );
 
