@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, Image, View, TouchableHighlight, ScrollView, Button } from 'react-native';
+import { StyleSheet, TouchableOpacity, Platform, Text, TextInput, Image, View, TouchableHighlight, ScrollView, Button } from 'react-native';
 import { Ionicons , FontAwesome} from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
+import { Font } from 'expo';
 import Timeline from 'react-native-timeline-listview'
 import * as firebase from 'firebase';
 import NavigationBar from 'react-native-navbar';
 import Moment from 'moment';
 import { Analytics, ScreenHit, Event } from 'expo-analytics';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import AddMoment from './AddMoment.js';
 import ViewMoment from './ViewMoment.js';
@@ -30,12 +32,14 @@ global.data = [
 ]
 
 
+
+
 class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
     };
     global.analytics.hit(new ScreenHit('Home'))
       .then(() => console.log("success"))
@@ -43,6 +47,11 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
+
+    Font.loadAsync({
+      'MaterialIcons': require('./assets/fonts/MaterialIcons-Regular.ttf'),
+    });
+
     var momentoRef = firebase.database().ref('/data/' + global.timelineName);
     momentoRef.once('value').then(function(snapshot) {
       momento = snapshot.val()
@@ -82,19 +91,34 @@ class HomeScreen extends React.Component {
     }
     else {
       return (
+
+        /*
         <View style={styles.navbar}>
-          <NavigationBar
-            rightButton = {{
-              title: 'Change Timelines',
-              handler: () => {
-                this.props.navigation.navigate('ViewTimelines');
-              },
-            }}
-            leftButton = {{
-              title: 'Logout',
-              handler: () => {this.logout()},
-            }}
-          />
+          <Image source={require('./img/icon.png')} style={{ width: 98, height: 22 }} />
+
+          <View style={styles.rightNav}>
+            <TouchableOpacity>
+            <Icon style={styles.navItem} name="search" size={25} />
+          </TouchableOpacity>
+            <TouchableOpacity>
+            <Icon style={styles.navItem} name="account-circle" size={25} />
+            </TouchableOpacity>
+        </View>
+        */
+
+         
+
+          
+          
+    
+            
+
+
+
+
+
+
+
           <View style={styles.container}>
             <View style={{alignItems: 'center',}}>
               <Text style={styles.titleText}>Momento</Text>
@@ -148,7 +172,33 @@ class HomeScreen extends React.Component {
               </View>
             </View>
           </View>
-        </View>
+       
+
+
+
+
+/*
+<View style={styles.tabBar}>
+<TouchableOpacity style={styles.tabItem}>
+  <Icon name="home" size={25}/>
+  <Text style={styles.tabTitle}>Home</Text>
+</TouchableOpacity>
+<TouchableOpacity style={styles.tabItem}>
+  <Icon name="whatshot" size={25} />
+  <Text style={styles.tabTitle}>Trending</Text>
+</TouchableOpacity>
+<TouchableOpacity style={styles.tabItem}>
+  <Icon name="subscriptions" size={25} />
+  <Text style={styles.tabTitle}>Subscriptions</Text>
+</TouchableOpacity>
+<TouchableOpacity style={styles.tabItem}>
+  <Icon name="folder" size={25} />
+  <Text style={styles.tabTitle}>Library</Text>
+</TouchableOpacity>
+</View>
+*/
+
+ //</View>
 
       );
     }
@@ -199,24 +249,54 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   navbar: {
-    flex: 1,
-    backgroundColor: 'white',
+    //flex: 1,
+    //height: 75,
+    //backgroundColor: 'white',
     paddingTop: 28,
-    paddingHorizontal: 10,
+    //paddingHorizontal: 10,
+
+    //height: 55,
+    backgroundColor: 'white',
+    elevation: 10,
+    paddingHorizontal: 15
+    //flexDirection: 'row',
+   // alignItems: 'center',
+    //justifyContent: 'space-between'
   },
   container: {
     flex: 1,
     backgroundColor: 'white',
     padding: 20,
   },
+  rightNav: {
+    flexDirection: 'row'
+  },
+  navItem: {
+    marginLeft: 25
+  },
+
   titleText:{
-    fontFamily: 'Baskerville',
+    ...Platform.select({
+      ios: {
+        fontFamily: 'Bakersville',
+      },
+      android: {
+        fontFamily: 'Roboto',
+      },
+    }),
     fontSize: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
   loadText: {
-    fontFamily: 'Baskerville',
+    ...Platform.select({
+      ios: {
+        fontFamily: 'Bakersville',
+      },
+      android: {
+        fontFamily: 'Roboto',
+      },
+    }),
     fontSize: 24,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -243,6 +323,26 @@ const styles = StyleSheet.create({
   alignLeft: {
     alignItems: 'flex-start',
     justifyContent: 'center',
+  },
+
+
+
+  tabBar: {
+    backgroundColor: 'white',
+    height: 60,
+    borderTopWidth: 0.5,
+    borderColor: '#E5E5E5',
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
+  tabItem: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tabTitle: {
+    fontSize: 11,
+    color: '#3c3c3c',
+    paddingTop: 4
   },
 
   title: {
