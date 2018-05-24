@@ -56,6 +56,7 @@ render() {
           onChangeText={(email) => this.setState({ email: email, emailEmpty: email.length == 0 })}
           placeholder='email'
           placeholderTextColor = 'red'
+          autoCapitalize = 'none'
           style={[this.state.emailEmpty ? styles.invalidInput : styles.validInput]}
         />
         <TextInput

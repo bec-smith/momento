@@ -20,7 +20,7 @@ class EditMoment extends React.Component {
       description: params ? params.description : null,
       imageUrl: params.imageUrl ? params.imageUrl : null,
       imageUri: null,
-      BGColor: 'white',
+      uploading: false,
     }
     global.analytics.hit(new ScreenHit('EditMoment'))
       .then(() => console.log("success"))
@@ -36,150 +36,154 @@ class EditMoment extends React.Component {
 
     let imageSource = this.state.imageUri ? this.state.imageUri : this.state.imageUrl
 
-    return (
-      <View style={styles.navbarContainer}>
-        <ScrollView>
-          <NavigationBar
-            title = {{
-              title: 'Edit Moment',
-            }}
-            rightButton = {{
-              title: 'Done',
-              handler: () => {
-                if (typeof this.state.time === 'string') {
-                  this.editMoment();
-                }
-                else if (this.state.time != null) {
-                  this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
-                    this.editMoment();
-                  })
-                }
-              },
-            }}
-            leftButton = {{
-              title: 'Cancel',
-              handler: () => {this.props.navigation.goBack();},
-            }}
-          />
-          <View style={[styles.container, {backgroundColor: this.state.BGColor}]}>
-            <TextInput
-              style={styles.smallInput}
-              value={this.state.title}
-              onChangeText={title => this.setState({title})}
-              placeholder="Title"
-              multiline = {true}
-              numberOfLines = {4}
-              returnKeyType="next"
-              blurOnSubmit={true}
-            />
-            <TextInput
-              style={styles.largeInput}
-              value={this.state.description}
-              onChangeText={description => this.setState({description})}
-              placeholder="Description"
-              multiline = {true}
-              numberOfLines = {4}
-              returnKeyType="done"
-              blurOnSubmit={true}
-            />
-            <Calendar
-              onChange={(time) =>
-              {
-                this.setState({time})
+    if (this.state.uploading) {
+      return <View style={styles.loadContainer}><Text style={styles.loadText}>Uploading...</Text></View>;
+    } else {
+      return (
+        <View style={styles.navbarContainer}>
+          <ScrollView>
+            <NavigationBar
+              title = {{
+                title: 'Edit Moment',
               }}
-              selected={this.state.time}
-              minDate={Moment().subtract(10, 'years').startOf('day')}
-              maxDate={Moment().startOf('day')}
-              showArrows = {true}
-
-              style={{
-                 borderWidth: 1,
-                 borderColor: GREY,
-                 borderRadius: 5,
-               }}
-               barView={{
-                 backgroundColor: BLUE,
-                 padding: 10,
-               }}
-               barText={{
-                 fontWeight: 'bold',
-                 color: WHITE,
-               }}
-               stageView={{
-                 padding: 0,
-               }}
-               // Day selector styling
-               dayHeaderView={{
-                 backgroundColor: LIGHT_GREY,
-                 borderBottomColor: GREY,
-               }}
-               dayHeaderText={{
-                 fontWeight: 'bold',
-                 color: BLACK,
-               }}
-               dayRowView={{
-                 borderColor: LIGHT_GREY,
-                 height: 40,
-               }}
-               dayText={{
-                 color: BLACK,
-               }}
-               dayDisabledText={{
-                 color: GREY,
-               }}
-               dayTodayText={{
-                 fontWeight: 'bold',
-                 color: BLUE,
-               }}
-               daySelectedText={{
-                 fontWeight: 'bold',
-                 backgroundColor: BLUE,
-                 color: WHITE,
-                 borderRadius: 15,
-                 borderColor: "transparent",
-                 overflow: 'hidden',
-               }}
-               // Styling month selector.
-               monthText={{
-                 color: BLACK,
-                 borderColor: BLACK,
-               }}
-               monthDisabledText={{
-                 color: GREY,
-                 borderColor: GREY,
-               }}
-               monthSelectedText={{
-                 fontWeight: 'bold',
-                 backgroundColor: BLUE,
-                 color: WHITE,
-                 overflow: 'hidden',
-               }}
-               // Styling year selector.
-               yearMinTintColor={BLUE}
-               yearMaxTintColor={GREY}
-               yearText={{
-                 color: BLACK,
-               }}
+              rightButton = {{
+                title: 'Done',
+                handler: () => {
+                  if (typeof this.state.time === 'string') {
+                    this.editMoment();
+                  }
+                  else if (this.state.time != null) {
+                    this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
+                      this.editMoment();
+                    })
+                  }
+                },
+              }}
+              leftButton = {{
+                title: 'Cancel',
+                handler: () => {this.props.navigation.goBack();},
+              }}
             />
-            <View>
-              <Button
-                title="Delete Moment"
-                onPress={() => {
-                  this.deleteMoment();
+            <View style={styles.container}>
+              <TextInput
+                style={styles.smallInput}
+                value={this.state.title}
+                onChangeText={title => this.setState({title})}
+                placeholder="Title"
+                multiline = {true}
+                numberOfLines = {4}
+                returnKeyType="next"
+                blurOnSubmit={true}
+              />
+              <TextInput
+                style={styles.largeInput}
+                value={this.state.description}
+                onChangeText={description => this.setState({description})}
+                placeholder="Description"
+                multiline = {true}
+                numberOfLines = {4}
+                returnKeyType="done"
+                blurOnSubmit={true}
+              />
+              <Calendar
+                onChange={(time) =>
+                {
+                  this.setState({time})
                 }}
+                selected={this.state.time}
+                minDate={Moment().subtract(10, 'years').startOf('day')}
+                maxDate={Moment().startOf('day')}
+                showArrows = {true}
+
+                style={{
+                   borderWidth: 1,
+                   borderColor: GREY,
+                   borderRadius: 5,
+                 }}
+                 barView={{
+                   backgroundColor: BLUE,
+                   padding: 10,
+                 }}
+                 barText={{
+                   fontWeight: 'bold',
+                   color: WHITE,
+                 }}
+                 stageView={{
+                   padding: 0,
+                 }}
+                 // Day selector styling
+                 dayHeaderView={{
+                   backgroundColor: LIGHT_GREY,
+                   borderBottomColor: GREY,
+                 }}
+                 dayHeaderText={{
+                   fontWeight: 'bold',
+                   color: BLACK,
+                 }}
+                 dayRowView={{
+                   borderColor: LIGHT_GREY,
+                   height: 40,
+                 }}
+                 dayText={{
+                   color: BLACK,
+                 }}
+                 dayDisabledText={{
+                   color: GREY,
+                 }}
+                 dayTodayText={{
+                   fontWeight: 'bold',
+                   color: BLUE,
+                 }}
+                 daySelectedText={{
+                   fontWeight: 'bold',
+                   backgroundColor: BLUE,
+                   color: WHITE,
+                   borderRadius: 15,
+                   borderColor: "transparent",
+                   overflow: 'hidden',
+                 }}
+                 // Styling month selector.
+                 monthText={{
+                   color: BLACK,
+                   borderColor: BLACK,
+                 }}
+                 monthDisabledText={{
+                   color: GREY,
+                   borderColor: GREY,
+                 }}
+                 monthSelectedText={{
+                   fontWeight: 'bold',
+                   backgroundColor: BLUE,
+                   color: WHITE,
+                   overflow: 'hidden',
+                 }}
+                 // Styling year selector.
+                 yearMinTintColor={BLUE}
+                 yearMaxTintColor={GREY}
+                 yearText={{
+                   color: BLACK,
+                 }}
               />
+              <View>
+                <Button
+                  title="Delete Moment"
+                  onPress={() => {
+                    this.deleteMoment();
+                  }}
+                />
+              </View>
+              <View style={{ paddingTop: 20 }}>
+                <Button
+                  title="Pick image from camera roll"
+                  onPress={this.pickFromGallery}
+                />
+              </View>
+              {imageSource && <Image source={{ uri: imageSource }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
             </View>
-            <View style={{ paddingTop: 20 }}>
-              <Button
-                title="Pick image from camera roll"
-                onPress={this.pickFromGallery}
-              />
-            </View>
-            {imageSource && <Image source={{ uri: imageSource }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
-          </View>
-        </ScrollView>
-      </View>
-    );
+          </ScrollView>
+        </View>
+      );
+    }
   }
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -208,9 +212,9 @@ class EditMoment extends React.Component {
     global.analytics.event(new Event('Moment', 'Edit', this.state.title))
       .then(() => console.log("success"))
       .catch(e => console.log(e.message));
+    this.setState({uploading: true})
     deleteMomento(global.timelineName, this.state.id);
     if (this.state.imageUri) {
-      this.setState({BGColor: 'darkgray'})
       this.uploadImageAndPushMomento(this.state.imageUri);
     } else {
       pushMomento(this.state.title,
@@ -298,6 +302,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingTop: 28,
+  },
+  loadText: {
+    fontFamily: 'Baskerville',
+    fontSize: 24,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  loadContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   smallInput: {
     marginVertical: 20,

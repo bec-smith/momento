@@ -18,7 +18,7 @@ class AddMoment extends React.Component {
       description: null,
       imageUrl: null,
       imageUri: null,
-      BGColor: 'white'
+      uploading: false,
   };
     global.analytics.hit(new ScreenHit('AddMoment'))
      .then(() => console.log("success"))
@@ -33,146 +33,150 @@ class AddMoment extends React.Component {
     const BLACK = '#424242';
     const LIGHT_GREY = '#F5F5F5';
 
-    return (
-      <View style={styles.navbarContainer}>
-        <ScrollView>
-          <NavigationBar
-            title = {{
-              title: 'Add Moment',
-            }}
-            rightButton = {{
-              title: 'Done',
-              handler: () => {
-                if (this.state.time != null) {
-                  this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
-                    if (this.state.imageUri) {
-                      this.uploadImageAndPushMomento(this.state.imageUri)
-                      this.setState({BGColor: 'darkgray'})
-                    } else {
-                      this.setState({BGColor: 'darkgray'})
-                      this.addMoment();
-                    }
-                  })
+    if (this.state.uploading) {
+      return <View style={styles.loadContainer}><Text style={styles.loadText}>Uploading...</Text></View>;
+    } else {
+      return (
+        <View style={styles.navbarContainer}>
+          <ScrollView>
+            <NavigationBar
+              title = {{
+                title: 'Add Moment',
+              }}
+              rightButton = {{
+                title: 'Done',
+                handler: () => {
+                  if (this.state.time != null) {
+                    this.setState({time: this.state.time.format("MMM D, YYYY").toString()}, function() {
+                      if (this.state.imageUri) {
+                        this.setState({uploading: true})
+                        this.uploadImageAndPushMomento(this.state.imageUri)
+                      } else {
+                        this.setState({uploading: true})
+                        this.addMoment();
+                      }
+                    })
 
-                }
-              },
-            }}
-            leftButton = {{
-              title: 'Cancel',
-              handler: () => {this.props.navigation.goBack();},
-            }}
-          />
-          <View style={[styles.container, {backgroundColor: this.state.BGColor}]}>
-            <TextInput
-              style={styles.smallInput}
-              value={this.state.title}
-              onChangeText={title => this.setState({title})}
-              placeholder="Title"
-              multiline = {true}
-              numberOfLines = {4}
-              returnKeyType="next"
-              blurOnSubmit={true}
-            />
-            <TextInput
-              style={styles.largeInput}
-              value={this.state.description}
-              onChangeText={description => this.setState({description})}
-              placeholder="Description"
-              multiline = {true}
-              numberOfLines = {4}
-              returnKeyType="done"
-              blurOnSubmit={true}
-            />
-            <Calendar
-              onChange={(time) =>
-              {
-                this.setState({time})
+                  }
+                },
               }}
-              selected={this.state.time}
-              minDate={Moment().subtract(10, 'years').startOf('day')}
-              maxDate={Moment().startOf('day')}
-              showArrows = {true}
-
-              style={{
-               borderWidth: 1,
-               borderColor: GREY,
-               borderRadius: 5,
-              }}
-              barView={{
-               backgroundColor: BLUE,
-               padding: 10,
-              }}
-              barText={{
-               fontWeight: 'bold',
-               color: WHITE,
-              }}
-              stageView={{
-               padding: 0,
-              }}
-              // Day selector styling
-              dayHeaderView={{
-               backgroundColor: LIGHT_GREY,
-               borderBottomColor: GREY,
-              }}
-              dayHeaderText={{
-               fontWeight: 'bold',
-               color: BLACK,
-              }}
-              dayRowView={{
-               borderColor: LIGHT_GREY,
-               height: 40,
-              }}
-              dayText={{
-               color: BLACK,
-              }}
-              dayDisabledText={{
-               color: GREY,
-              }}
-              dayTodayText={{
-               fontWeight: 'bold',
-               color: BLUE,
-              }}
-              daySelectedText={{
-               fontWeight: 'bold',
-               backgroundColor: BLUE,
-               color: WHITE,
-               borderRadius: 15,
-               borderColor: "transparent",
-               overflow: 'hidden',
-              }}
-              // Styling month selector.
-              monthText={{
-               color: BLACK,
-               borderColor: BLACK,
-              }}
-              monthDisabledText={{
-               color: GREY,
-               borderColor: GREY,
-              }}
-              monthSelectedText={{
-               fontWeight: 'bold',
-               backgroundColor: BLUE,
-               color: WHITE,
-               overflow: 'hidden',
-              }}
-              // Styling year selector.
-              yearMinTintColor={BLUE}
-              yearMaxTintColor={GREY}
-              yearText={{
-                color: BLACK,
+              leftButton = {{
+                title: 'Cancel',
+                handler: () => {this.props.navigation.goBack();},
               }}
             />
-            <View style={{ paddingTop: 20 }}>
-              <Button
-                title="Pick image from camera roll"
-                onPress={this.pickFromGallery}
+            <View style={styles.container}>
+              <TextInput
+                style={styles.smallInput}
+                value={this.state.title}
+                onChangeText={title => this.setState({title})}
+                placeholder="Title"
+                multiline = {true}
+                numberOfLines = {4}
+                returnKeyType="next"
+                blurOnSubmit={true}
               />
+              <TextInput
+                style={styles.largeInput}
+                value={this.state.description}
+                onChangeText={description => this.setState({description})}
+                placeholder="Description"
+                multiline = {true}
+                numberOfLines = {4}
+                returnKeyType="done"
+                blurOnSubmit={true}
+              />
+              <Calendar
+                onChange={(time) =>
+                {
+                  this.setState({time})
+                }}
+                selected={this.state.time}
+                minDate={Moment().subtract(10, 'years').startOf('day')}
+                maxDate={Moment().startOf('day')}
+                showArrows = {true}
+
+                style={{
+                 borderWidth: 1,
+                 borderColor: GREY,
+                 borderRadius: 5,
+                }}
+                barView={{
+                 backgroundColor: BLUE,
+                 padding: 10,
+                }}
+                barText={{
+                 fontWeight: 'bold',
+                 color: WHITE,
+                }}
+                stageView={{
+                 padding: 0,
+                }}
+                // Day selector styling
+                dayHeaderView={{
+                 backgroundColor: LIGHT_GREY,
+                 borderBottomColor: GREY,
+                }}
+                dayHeaderText={{
+                 fontWeight: 'bold',
+                 color: BLACK,
+                }}
+                dayRowView={{
+                 borderColor: LIGHT_GREY,
+                 height: 40,
+                }}
+                dayText={{
+                 color: BLACK,
+                }}
+                dayDisabledText={{
+                 color: GREY,
+                }}
+                dayTodayText={{
+                 fontWeight: 'bold',
+                 color: BLUE,
+                }}
+                daySelectedText={{
+                 fontWeight: 'bold',
+                 backgroundColor: BLUE,
+                 color: WHITE,
+                 borderRadius: 15,
+                 borderColor: "transparent",
+                 overflow: 'hidden',
+                }}
+                // Styling month selector.
+                monthText={{
+                 color: BLACK,
+                 borderColor: BLACK,
+                }}
+                monthDisabledText={{
+                 color: GREY,
+                 borderColor: GREY,
+                }}
+                monthSelectedText={{
+                 fontWeight: 'bold',
+                 backgroundColor: BLUE,
+                 color: WHITE,
+                 overflow: 'hidden',
+                }}
+                // Styling year selector.
+                yearMinTintColor={BLUE}
+                yearMaxTintColor={GREY}
+                yearText={{
+                  color: BLACK,
+                }}
+              />
+              <View style={{ paddingTop: 20 }}>
+                <Button
+                  title="Pick image from camera roll"
+                  onPress={this.pickFromGallery}
+                />
+              </View>
+              {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
             </View>
-            {imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200, alignSelf: 'center'}} />}
-          </View>
-        </ScrollView>
-      </View>
-    );
+          </ScrollView>
+        </View>
+      );
+    }
   }
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -262,6 +266,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingTop: 28,
+  },
+  loadText: {
+    fontFamily: 'Baskerville',
+    fontSize: 24,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  loadContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   smallInput: {
     marginVertical: 20,
